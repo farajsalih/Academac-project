@@ -1,0 +1,1363 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDU CREATIVITY CENTER | Master English, Express Creativity</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg?v=1">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <!-- Tailwind & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#E11D48',
+                            pinkHover: '#BE123C',
+                            dark: '#0F172A',
+                            blue: '#0782c7',
+                            text: '#334155',
+                            heading: '#020617',
+                        }
+                    },
+                    letterSpacing: {
+                        tight: '-0.02em',
+                        tighter: '-0.04em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background-color: #FFFFFF;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background similar to image */
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        /* Gradient Blobs */
+        .blob-blue {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        .blob-pink {
+            background: radial-gradient(circle, rgba(225, 29, 72, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        .blob-orange {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        /* Card Hover Effects */
+        .course-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(225, 29, 72, 0.15);
+            border-color: rgba(225, 29, 72, 0.3);
+        }
+
+        /* Animations */
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .shimmer-layer {
+            transform: translateX(-100%);
+        }
+
+        .group:hover .shimmer-layer {
+            animation: shimmer 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+    </style>
+</head>
+
+<body class="w-full relative bg-white font-sans">
+
+    <!-- Fixed Background Elements -->
+    <!-- Animated Background -->
+    <iframe id="background-frame" src="background.html"
+        class="fixed inset-0 w-full h-full z-0 border-0 pointer-events-none" title="Background Animation"></iframe>
+    <script>
+        // Forward mouse movement to the background iframe for interactivity
+        document.addEventListener('mousemove', (e) => {
+            const iframe = document.getElementById('background-frame');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.dispatchEvent(new MouseEvent('mousemove', {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    bubbles: true
+                }));
+            }
+        });
+    </script>
+
+    <!-- Navigation -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <a href="generated-page.html"
+            class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+            <!-- Logo -->
+            <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                class="h-10 w-auto rounded-lg object-contain mix-blend-multiply">
+            <span class="text-brand-heading text-lg font-bold tracking-tight">EDU CREATIVITY CENTER</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-4">
+            <a href="#"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Home</a>
+            <a href="about.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">About</a>
+            <a href="courses.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Courses</a>
+            <a href="contact.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+
+            <button onclick="window.location.href='login.html'"
+                class="relative bg-brand-pink text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-lg shadow-brand-pink/30 hover:bg-brand-pinkHover hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                Join Now
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex flex-col w-full">
+
+        <!-- HERO SECTION -->
+        <section
+            class="min-h-[85vh] flex flex-col lg:flex-row md:px-12 lg:px-20 pt-32 pb-12 relative gap-16 items-center justify-between">
+            <div class="max-w-4xl space-y-8 relative z-10">
+                <div class="space-y-4">
+                    <h1
+                        class="text-6xl md:text-7xl lg:text-8xl text-brand-heading leading-[0.95] font-bold tracking-tight min-h-[1.2em] animate-fade-in">
+                        Master English<br>
+                        <span id="typewriter-cursor"
+                            class="text-brand-pink bg-clip-text text-transparent bg-gradient-to-r from-brand-pink to-orange-500 border-r-4 border-brand-pink pr-2"></span>
+                    </h1>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const text = "Express Creativity";
+                            const element = document.getElementById('typewriter-cursor');
+                            let i = 0;
+
+                            // Initial state: empty
+                            element.textContent = "";
+
+                            function typeWriter() {
+                                if (i < text.length) {
+                                    element.textContent += text.charAt(i);
+                                    i++;
+                                    setTimeout(typeWriter, 80); // Typing speed
+                                } else {
+                                    // Remove cursor after typing
+                                    element.classList.remove('border-r-4');
+                                }
+                            }
+
+                            // Start typing with a slight delay after the fade-in of the first line
+                            setTimeout(typeWriter, 800);
+                        });
+                    </script>
+                    <style>
+                        @keyframes fadeInUp {
+                            from {
+                                opacity: 0;
+                                transform: translateY(20px);
+                            }
+
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+
+                        .animate-fade-in-up {
+                            animation: fadeInUp 0.8s ease-out forwards;
+                            opacity: 0;
+                        }
+
+                        .animate-fade-in {
+                            animation: fadeInUp 0.8s ease-out forwards;
+                        }
+
+                        .delay-200 {
+                            animation-delay: 0.2s;
+                        }
+
+                        .delay-400 {
+                            animation-delay: 0.4s;
+                        }
+                    </style>
+                    <p
+                        class="max-w-lg text-lg text-brand-text leading-relaxed font-medium animate-fade-in-up delay-200">
+                        A modern English academy that builds fluency through real conversation, smart practice, and
+                        confident expression—step by step.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4 pt-2 animate-fade-in-up delay-400">
+                    <button onclick="window.location.href='login.html'"
+                        class="group relative px-8 py-4 bg-brand-pink text-white text-sm font-bold rounded-lg shadow-xl shadow-brand-pink/25 hover:bg-brand-pinkHover hover:scale-[1.02] transition-all duration-300 overflow-hidden">
+                        <div
+                            class="shimmer-layer absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent z-10 pointer-events-none">
+                        </div>
+                        <div class="flex items-center gap-2 relative z-20">
+                            <span>Book a Placement Test</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <a href="courses.html"
+                        class="px-8 py-4 bg-white text-brand-blue border-2 border-brand-blue/20 text-sm font-bold rounded-lg hover:border-brand-blue hover:text-brand-blue hover:shadow-lg hover:shadow-brand-blue/10 transition-all duration-300 inline-block">
+                        View Courses
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visual: Learning Path Map -->
+            <div class="relative w-full max-w-2xl aspect-[4/3] flex items-center justify-center">
+                <div
+                    class="absolute inset-0 bg-gradient-to-tr from-blue-100 via-pink-50 to-white opacity-60 blur-3xl rounded-full">
+                </div>
+                <div
+                    class="w-full h-full relative bg-white border border-gray-100 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] overflow-hidden">
+
+
+                    <div class="h-full flex items-center justify-center relative">
+                        <div class="learning-viz-wrapper" style="width: 100%; height: 100%; overflow: hidden;">
+                            <style>
+                                .learning-viz-wrapper {
+                                    /* Root Variables Scoped */
+                                    --blue: #0782c7;
+                                    --pink: #dd0878;
+                                    --orange: #f3a609;
+                                    --green: #16a34a;
+                                    --track: #eef2f6;
+                                    --text: #111827;
+                                    --muted: rgba(17, 24, 39, .35);
+                                    --ease: cubic-bezier(.22, .8, .2, 1);
+
+                                    font-family: system-ui, Arial, sans-serif;
+                                    background: #fff;
+                                    padding: 0;
+                                    margin: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    box-sizing: border-box;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                }
+
+                                /* Scoped Styles */
+                                .learning-viz-wrapper .wrap {
+                                    max-width: 1000px;
+                                    margin: auto;
+                                    width: 100%;
+                                    opacity: 0;
+                                    transform: translateY(20px);
+                                    animation: userFadeIn 1.2s ease forwards;
+                                }
+
+                                @keyframes userFadeIn {
+                                    to {
+                                        opacity: 1;
+                                        transform: translateY(0);
+                                    }
+                                }
+
+                                .learning-viz-wrapper .hero img {
+                                    max-width: 100%;
+                                    display: block;
+                                    margin: auto;
+                                }
+
+                                /* Top Line */
+                                .learning-viz-wrapper .top-track {
+                                    margin-top: 40px;
+                                    height: 8px;
+                                    background: var(--track);
+                                    border-radius: 999px;
+                                    overflow: hidden;
+                                }
+
+                                .learning-viz-wrapper .top-fill {
+                                    height: 100%;
+                                    width: 0%;
+                                    background: var(--blue);
+                                    transition: background-color .6s ease;
+                                }
+
+                                .learning-viz-wrapper .timeline-section {
+                                    padding: 0 60px;
+                                    /* Increased from 40px to 60px */
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                }
+
+                                /* Nodes */
+                                .learning-viz-wrapper .nodes {
+                                    position: relative;
+                                    margin-top: -20px;
+                                    height: 60px;
+                                }
+
+                                .learning-viz-wrapper .node {
+                                    position: absolute;
+                                    transform: translateX(-50%);
+                                    text-align: center;
+                                }
+
+                                .learning-viz-wrapper .dot {
+                                    width: 18px;
+                                    height: 18px;
+                                    border-radius: 50%;
+                                    background: #fff;
+                                    border: 4px solid var(--track);
+                                    transition: .6s var(--ease);
+                                    margin: auto;
+                                }
+
+                                .learning-viz-wrapper .label {
+                                    margin-top: 8px;
+                                    font-size: 11px;
+                                    font-weight: 600;
+                                    opacity: 1;
+                                    /* Fully visible */
+                                    filter: blur(0);
+                                    /* Remove blur */
+                                    color: var(--text);
+                                    /* Use text color */
+                                    transition: .7s var(--ease);
+                                }
+
+                                /* Active State */
+                                .learning-viz-wrapper .node.active .dot {
+                                    border-color: currentColor;
+                                    transform: scale(1.08);
+                                }
+
+                                .learning-viz-wrapper .node.active .label {
+                                    opacity: 1;
+                                    filter: blur(0);
+                                    color: var(--text);
+                                }
+                            </style>
+
+                            <!-- Image -->
+                            <div class="hero">
+                                <img src="./PicHome.svg" alt="PicHome" class="animate-fade-in-up"
+                                    style="animation-delay: 0.1s; opacity: 0;">
+                            </div>
+
+                            <div class="timeline-section">
+                                <!-- Top Line -->
+                                <div class="top-track">
+                                    <div class="top-fill" id="topFill"></div>
+                                </div>
+
+                                <!-- Nodes -->
+                                <div class="nodes">
+                                    <div class="node" data-key="context" style="left:0%; color:var(--blue)">
+                                        <div class="dot"></div>
+                                        <div class="label">Context</div>
+                                    </div>
+
+                                    <div class="node" data-key="goals" style="left:33%; color:var(--pink)">
+                                        <div class="dot"></div>
+                                        <div class="label">Goals</div>
+                                    </div>
+
+                                    <div class="node" data-key="practice" style="left:66%; color:var(--orange)">
+                                        <div class="dot"></div>
+                                        <div class="label">Practice</div>
+                                    </div>
+
+                                    <div class="node" data-key="mastery" style="left:100%; color:var(--green)">
+                                        <div class="dot"></div>
+                                        <div class="label">Mastery</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            (function () {
+                                const stops = [
+                                    { key: "context", at: 0, color: "#0782c7" },
+                                    { key: "goals", at: 33, color: "#dd0878" },
+                                    { key: "practice", at: 66, color: "#f3a609" },
+                                    { key: "mastery", at: 100, color: "#16a34a" }
+                                ];
+
+                                const duration = 9000;
+                                const delay = 800;
+
+                                // Scope selection to this wrapper
+                                const wrapper = document.querySelector('.learning-viz-wrapper');
+                                const topFill = wrapper.querySelector("#topFill");
+                                const nodes = [...wrapper.querySelectorAll(".node")];
+
+                                function easeInOut(t) {
+                                    return t < .5
+                                        ? 4 * t * t * t
+                                        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                                }
+
+                                function activate(current) {
+                                    stops.forEach(s => {
+                                        if (current >= s.at) {
+                                            const node = nodes.find(n => n.dataset.key === s.key);
+                                            if (node) node.classList.add("active");
+
+                                            // Update Top Fill Color at Mastery
+                                            topFill.style.background = s.color;
+                                        }
+                                    });
+                                }
+
+                                let start = null;
+                                function animate(ts) {
+                                    if (!start) start = ts;
+                                    const p = Math.min((ts - start) / duration, 1);
+                                    const eased = easeInOut(p);
+                                    const current = eased * 100;
+
+                                    topFill.style.width = current + "%";
+
+                                    activate(current);
+
+                                    if (p < 1) requestAnimationFrame(animate);
+                                }
+
+                                setTimeout(() => {
+                                    activate(0);
+                                    requestAnimationFrame(animate);
+                                }, delay);
+                            })();
+                        </script>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section class="border-y border-gray-100 bg-white py-12">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="space-y-1">
+                    <div class="text-4xl font-extrabold text-brand-pink tracking-tight">12k+</div>
+                    <div class="text-sm font-semibold text-brand-heading">Graduates</div>
+                </div>
+                <div class="space-y-1">
+                    <div class="text-4xl font-extrabold text-brand-pink tracking-tight">50+</div>
+                    <div class="text-sm font-semibold text-brand-heading">Native Tutors</div>
+                </div>
+                <div class="space-y-1">
+                    <div class="text-4xl font-extrabold text-brand-pink tracking-tight">98%</div>
+                    <div class="text-sm font-semibold text-brand-heading">Success Rate</div>
+                </div>
+                <div class="space-y-1">
+                    <div class="text-4xl font-extrabold text-brand-pink tracking-tight">24/7</div>
+                    <div class="text-sm font-semibold text-brand-heading">Global Support</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEARNING JOURNEY (Timeline) -->
+        <section id="learning-journey" class="relative w-full bg-white border-b border-gray-100" style="height: 350vh;">
+            <div
+                class="sticky overflow-hidden flex flex-col w-full h-screen top-0 left-0 items-center justify-start pt-28">
+                <div class="max-w-4xl w-full px-6 md:px-12 relative z-10 flex flex-col items-center h-full pb-10">
+                    <div class="text-center mb-12 shrink-0 transition-opacity duration-700" id="lifecycle-header">
+                        <h2 class="text-3xl md:text-4xl font-bold text-brand-heading tracking-tight mb-3">
+                            The Fluency Journey
+                        </h2>
+                        <p class="text-gray-500 text-base max-w-md mx-auto">
+                            From initial assessment to confident mastery.
+                        </p>
+                    </div>
+
+                    <div class="relative w-full max-w-2xl flex-1 flex flex-col justify-center my-auto">
+                        <!-- Line -->
+                        <div class="absolute left-1/2 top-4 bottom-4 w-px bg-gray-200 -translate-x-1/2"></div>
+                        <div id="lifecycle-line"
+                            class="absolute left-1/2 top-4 w-px bg-gradient-to-b from-brand-blue via-orange-500 to-brand-pink -translate-x-1/2 transition-all duration-75 ease-linear h-0 max-h-[calc(100%-2rem)]">
+                        </div>
+
+                        <div class="space-y-8 py-4 relative">
+                            <!-- Step 1 -->
+                            <div class="lifecycle-step group flex items-center justify-between w-full transition-all duration-500 opacity-30"
+                                data-threshold="0.1">
+                                <div class="w-[42%] text-right pr-8">
+                                    <span
+                                        class="text-[10px] text-brand-blue font-bold uppercase tracking-wider block mb-1">Step
+                                        01</span>
+                                    <h3 class="text-lg font-bold text-brand-blue">Assessment</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Determine your current CEFR level.</p>
+                                </div>
+                                <div class="relative shrink-0 z-10">
+                                    <div
+                                        class="w-4 h-4 rounded-full border-2 border-white shadow-md bg-gray-200 group-[.active]:bg-brand-blue group-[.active]:scale-125 transition-all duration-300">
+                                    </div>
+                                </div>
+                                <div class="w-[42%] pl-8">
+                                    <div class="bg-white border border-gray-100 p-3 rounded-lg shadow-sm inline-block">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
+                                            <span class="text-xs font-semibold text-gray-700">Placement Test
+                                                Pending...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div class="lifecycle-step group flex items-center justify-between w-full transition-all duration-500 opacity-30"
+                                data-threshold="0.3">
+                                <div class="w-[42%] text-right pr-8">
+                                    <div
+                                        class="bg-white border border-gray-100 p-3 rounded-lg shadow-sm inline-block text-left border-l-4 border-l-orange-500">
+                                        <span class="text-[10px] text-gray-400 block mb-1">Target</span>
+                                        <span class="text-xs font-bold text-gray-800">Business English B2</span>
+                                    </div>
+                                </div>
+                                <div class="relative shrink-0 z-10">
+                                    <div
+                                        class="w-4 h-4 rounded-full border-2 border-white shadow-md bg-gray-200 group-[.active]:bg-orange-500 group-[.active]:scale-125 transition-all duration-300">
+                                    </div>
+                                </div>
+                                <div class="w-[42%] pl-8">
+                                    <span
+                                        class="text-[10px] text-orange-500 font-bold uppercase tracking-wider block mb-1">Step
+                                        02</span>
+                                    <h3 class="text-lg font-bold text-orange-500">Personalized Plan</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Curriculum tailored to your goals.</p>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="lifecycle-step group flex items-center justify-between w-full transition-all duration-500 opacity-30"
+                                data-threshold="0.5">
+                                <div class="w-[42%] text-right pr-8">
+                                    <span
+                                        class="text-[10px] text-brand-pink font-bold uppercase tracking-wider block mb-1">Step
+                                        03</span>
+                                    <h3 class="text-lg font-bold text-brand-pink">Active Practice</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Live classes &amp; interactive drills.</p>
+                                </div>
+                                <div class="relative shrink-0 z-10">
+                                    <div
+                                        class="w-4 h-4 rounded-full border-2 border-white shadow-md bg-gray-200 group-[.active]:bg-brand-pink group-[.active]:scale-125 transition-all duration-300">
+                                    </div>
+                                </div>
+                                <div class="w-[42%] pl-8">
+                                    <div
+                                        class="bg-white border border-gray-100 p-3 rounded-lg shadow-sm inline-flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 bg-pink-50 rounded-md flex items-center justify-center text-brand-pink">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="text-[10px] text-gray-400">Weekly Progress</div>
+                                            <div class="text-xs font-bold text-gray-800">5 Speaking Sessions</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="lifecycle-step group flex items-center justify-between w-full transition-all duration-500 opacity-30"
+                                data-threshold="0.75">
+                                <div class="w-[42%] text-right pr-8">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-blue text-white text-xs font-bold shadow-md shadow-blue-500/20">
+                                        <span>Fluency Achieved</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="relative shrink-0 z-10">
+                                    <div
+                                        class="w-4 h-4 rounded-full border-2 border-white shadow-md bg-gray-200 group-[.active]:bg-brand-blue group-[.active]:scale-125 transition-all duration-300">
+                                    </div>
+                                </div>
+                                <div class="w-[42%] pl-8">
+                                    <span
+                                        class="text-[10px] text-brand-blue font-bold uppercase tracking-wider block mb-1">Step
+                                        04</span>
+                                    <h3 class="text-lg font-bold text-brand-blue">Certification</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Verify your skills with global standards.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                (function () {
+                    const section = document.getElementById('learning-journey');
+                    const header = document.getElementById('lifecycle-header');
+                    const line = document.getElementById('lifecycle-line');
+                    const steps = section.querySelectorAll('.lifecycle-step');
+
+                    function handleScroll() {
+                        if (!section) return;
+                        const rect = section.getBoundingClientRect();
+                        const viewH = window.innerHeight;
+                        const travelDistance = rect.height - viewH;
+                        const scrolled = -rect.top;
+                        let progress = scrolled / travelDistance;
+                        progress = Math.max(0, Math.min(1, progress));
+
+                        if (progress > 0.02) header.style.opacity = '1'; else header.style.opacity = '0';
+                        line.style.height = (progress * 100) + '%';
+
+                        steps.forEach(step => {
+                            const t = parseFloat(step.dataset.threshold);
+                            if (progress >= t) {
+                                if (progress < t + 0.2) {
+                                    step.classList.add('active');
+                                    step.classList.replace('opacity-30', 'opacity-100');
+                                    step.style.transform = 'scale(1.02)';
+                                } else {
+                                    step.classList.add('active');
+                                    step.classList.replace('opacity-30', 'opacity-60');
+                                    step.style.transform = 'scale(1)';
+                                }
+                            } else {
+                                step.classList.remove('active');
+                                step.classList.replace('opacity-100', 'opacity-30');
+                                step.classList.replace('opacity-60', 'opacity-30');
+                                step.style.transform = 'scale(1)';
+                            }
+                        });
+                    };
+                    window.addEventListener('scroll', handleScroll, { passive: true });
+                    handleScroll();
+                })();
+            </script>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="py-32 px-6 md:px-12 lg:px-20 bg-white relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                    <div class="max-w-xl">
+                        <h2 class="text-4xl md:text-5xl font-bold text-brand-heading tracking-tight mb-6">
+                            Structured Learning.<br>
+                            <span class="text-gray-400">Not just vocabulary.</span>
+                        </h2>
+                        <p class="text-gray-500 text-lg leading-relaxed">
+                            Bridge the gap between textbook knowledge and real-world confidence with our proprietary
+                            immersion method.
+                        </p>
+                    </div>
+                    <a href="#"
+                        class="pb-1 border-b-2 border-brand-pink text-sm font-bold text-brand-pink hover:text-brand-pinkHover transition-colors mb-2">
+                        Explore Methodology
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Feature 1 -->
+                    <div
+                        class="md:col-span-8 group relative bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden hover:border-brand-pink/30 transition-all duration-500">
+                        <div
+                            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(#e11d48_1px,transparent_1px)] [background-size:20px_20px] [mask-image:linear-gradient(to_bottom,black,transparent)]">
+                        </div>
+                        <div class="relative z-10 p-10 h-full flex flex-col justify-between">
+                            <div>
+                                <div
+                                    class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 text-brand-pink">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 1 1 3-3h7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold text-brand-heading mb-3">Interactive Curriculum</h3>
+                                <p class="text-gray-500">
+                                    Dynamic lessons that adapt to your pace. Visual aids, audio clips, and speaking
+                                    challenges integrated seamlessly.
+                                </p>
+                            </div>
+                            <div
+                                class="mt-8 h-24 w-full bg-white rounded-lg border border-slate-100 flex items-center justify-center shadow-sm">
+                                <div class="flex gap-2">
+                                    <span class="animate-bounce delay-0 w-3 h-3 bg-brand-pink rounded-full"></span>
+                                    <span class="animate-bounce delay-100 w-3 h-3 bg-brand-blue rounded-full"></span>
+                                    <span class="animate-bounce delay-200 w-3 h-3 bg-orange-400 rounded-full"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div
+                        class="md:col-span-4 group relative bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden hover:border-brand-pink/30 transition-all duration-500">
+                        <div class="p-10 relative z-10 flex flex-col h-full">
+                            <div
+                                class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 text-brand-pink">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-heading mb-3">Live Feedback</h3>
+                            <p class="text-sm text-gray-500 mb-8">
+                                Instant corrections from native tutors and AI pronunciation tools.
+                            </p>
+                            <div class="mt-auto relative w-full h-32 flex flex-col justify-end items-center">
+                                <div
+                                    class="w-full bg-white p-4 rounded-lg shadow-sm border border-slate-100 border-l-4 border-l-brand-pink">
+                                    <p class="text-xs text-gray-400 mb-1">Tutor Comment</p>
+                                    <p class="text-xs font-medium text-gray-800">"Great use of past tense, try to
+                                        enunciate the 'th' sound more clearly!"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="py-32 bg-brand-dark text-white relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute inset-0 opacity-10"
+                style="background-image: radial-gradient(#E11D48 1px, transparent 1px); background-size: 30px 30px;">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div class="relative w-full" id="testimonial-container"
+                            style="display: grid; grid-template-areas: 'stack';">
+                            <!-- Slide 1 -->
+                            <div class="transition-all duration-700 ease-in-out opacity-100 flex flex-col justify-center"
+                                style="grid-area: stack;" data-index="0">
+                                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-8 leading-snug">
+                                    "English Masters Academy completely changed my career path. I can now present to
+                                    international clients with zero hesitation."
+                                </h2>
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border border-white/20">
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-white">Maria Gonzales</div>
+                                        <div class="text-sm text-white/50">Marketing Director, Madrid</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="transition-all duration-700 ease-in-out opacity-0 pointer-events-none flex flex-col justify-center"
+                                style="grid-area: stack;" data-index="1">
+                                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-8 leading-snug">
+                                    "The structure is incredible. Unlike apps that feel like games, this felt like real
+                                    education tailored to my business needs."
+                                </h2>
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-teal-500 border border-white/20">
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-white">Hiroshi Tanaka</div>
+                                        <div class="text-sm text-white/50">Software Engineer, Tokyo</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 mt-10">
+                            <button id="testimonial-prev"
+                                class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-brand-pink hover:border-brand-pink transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M15 18l-6-6 6-6"></path>
+                                </svg>
+                            </button>
+                            <button id="testimonial-next"
+                                class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-brand-pink hover:border-brand-pink transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M9 18l6-6-6-6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Right -->
+                    <div
+                        class="flex flex-row md:flex-col justify-between gap-6 md:gap-0 md:space-y-12 border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-16">
+                        <div>
+                            <div class="text-3xl font-bold mb-1 text-brand-pink">6 Months</div>
+                            <div class="text-sm text-white/50">To C1 Fluency</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold mb-1 text-brand-pink">1-on-1</div>
+                            <div class="text-sm text-white/50">Dedicated Mentorship</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold mb-1 text-brand-pink">Verified</div>
+                            <div class="text-sm text-white/50">Certificates Included</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                (function () {
+                    const container = document.getElementById('testimonial-container');
+                    const prevBtn = document.getElementById('testimonial-prev');
+                    const nextBtn = document.getElementById('testimonial-next');
+                    const slides = container.querySelectorAll('[data-index]');
+                    let currentIndex = 0;
+                    const maxIndex = slides.length - 1;
+
+                    function updateState() {
+                        slides.forEach(slide => {
+                            const idx = parseInt(slide.dataset.index);
+                            if (idx === currentIndex) {
+                                slide.classList.remove('opacity-0', 'pointer-events-none');
+                                slide.classList.add('opacity-100');
+                            } else {
+                                slide.classList.remove('opacity-100');
+                                slide.classList.add('opacity-0', 'pointer-events-none');
+                            }
+                        });
+                    }
+
+                    prevBtn.addEventListener('click', () => {
+                        currentIndex = (currentIndex === 0) ? maxIndex : currentIndex - 1;
+                        updateState();
+                    });
+
+                    nextBtn.addEventListener('click', () => {
+                        currentIndex = (currentIndex === maxIndex) ? 0 : currentIndex + 1;
+                        updateState();
+                    });
+                })();
+            </script>
+        </section>
+
+        <!-- PRICING -->
+        <section class="py-32 px-6 md:px-12 lg:px-20 bg-slate-50">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-brand-heading mb-4">Transparent Pricing</h2>
+                    <p class="text-gray-500">Invest in your future. Choose the plan that fits your schedule.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Basic -->
+                    <div
+                        class="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 cursor-pointer">
+                        <div class="mb-4"><span class="font-bold text-brand-heading">Group Classes</span></div>
+                        <div class="mb-6 flex items-baseline gap-1">
+                            <span class="text-4xl font-bold text-brand-heading">$49</span>
+                            <span class="text-sm text-gray-400">/mo</span>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span> 4 Group
+                                Sessions/mo</li>
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span> Access
+                                to Video Library</li>
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span>
+                                Community Chat</li>
+                        </ul>
+                        <button onclick="window.location.href='login.html'"
+                            class="w-full py-3 rounded-lg border-2 border-gray-100 text-sm font-bold text-brand-heading hover:border-brand-pink hover:text-brand-pink transition-colors">Start
+                            Trial</button>
+                    </div>
+
+                    <!-- Pro -->
+                    <div
+                        class="p-8 rounded-2xl bg-brand-pink text-white shadow-2xl shadow-pink-500/20 transform scale-105 relative z-10 transition-transform duration-300 hover:scale-110 hover:-translate-y-2 cursor-pointer">
+                        <div
+                            class="absolute top-0 right-0 bg-white text-brand-pink text-[10px] font-bold px-3 py-1 rounded-bl-lg">
+                            POPULAR</div>
+                        <div class="mb-4"><span class="font-bold">Pro Tutoring</span></div>
+                        <div class="mb-6 flex items-baseline gap-1">
+                            <span class="text-4xl font-bold">$129</span>
+                            <span class="text-sm text-white/80">/mo</span>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex gap-3 text-sm text-white/90"><span class="text-white font-bold">✓</span> 4
+                                Private 1-on-1 Sessions</li>
+                            <li class="flex gap-3 text-sm text-white/90"><span class="text-white font-bold">✓</span>
+                                Unlimited Group Classes</li>
+                            <li class="flex gap-3 text-sm text-white/90"><span class="text-white font-bold">✓</span>
+                                Personalized Feedback</li>
+                        </ul>
+                        <button onclick="window.location.href='login.html'"
+                            class="w-full py-3 rounded-lg bg-white text-brand-pink text-sm font-bold hover:bg-gray-50 transition-colors shadow-lg">Get
+                            Started</button>
+                    </div>
+
+                    <!-- Mastery -->
+                    <div
+                        class="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 cursor-pointer">
+                        <div class="mb-4"><span class="font-bold text-brand-heading">Intensive Bootcamp</span></div>
+                        <div class="mb-6 flex items-baseline gap-1">
+                            <span class="text-4xl font-bold text-brand-heading">$299</span>
+                            <span class="text-sm text-gray-400">/mo</span>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span> Daily
+                                Private Sessions</li>
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span> Business
+                                English Specialist</li>
+                            <li class="flex gap-3 text-sm text-gray-600"><span class="text-brand-pink">✓</span> Exam
+                                Preparation (IELTS)</li>
+                        </ul>
+                        <button
+                            class="w-full py-3 rounded-lg border-2 border-gray-100 text-sm font-bold text-brand-heading hover:border-brand-pink hover:text-brand-pink transition-colors">Contact
+                            Us</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <!-- FOOTER with Bubbles -->
+        <style>
+            .footer-container {
+                position: relative;
+                /* Background is provided by the gooey layer */
+                background: transparent;
+                z-index: 10;
+            }
+
+            .gooey-layer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                filter: url("#blob");
+                z-index: -1;
+                /* Allow bubbles to extend slightly if needed, though overflow hidden on footer might clip */
+                overflow: hidden;
+            }
+
+            .footer-base {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #020617;
+            }
+
+            .bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                z-index: 1;
+            }
+
+            .bubble {
+                position: absolute;
+                left: var(--position, 50%);
+                background: #020617;
+                border-radius: 100%;
+                animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s),
+                    bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
+                transform: translate(-50%, 100%);
+                bottom: 0;
+            }
+
+            @keyframes bubble-size {
+
+                0%,
+                75% {
+                    width: var(--size, 4rem);
+                    height: var(--size, 4rem);
+                }
+
+                100% {
+                    width: 0rem;
+                    height: 0rem;
+                }
+            }
+
+            @keyframes bubble-move {
+                0% {
+                    bottom: -4rem;
+                }
+
+                100% {
+                    bottom: var(--distance, 10rem);
+                }
+            }
+
+            .footer-content {
+                position: relative;
+                z-index: 20;
+                /* Text sits separate from gooey layer */
+            }
+        </style>
+
+        <footer class="footer-container pt-20 pb-10 px-6 md:px-12 lg:px-20 border-t border-white/5 text-white">
+            <!-- Background Layer (Filtered) -->
+            <div class="gooey-layer">
+                <!-- The solid base of the footer to merge with -->
+                <div class="footer-base"></div>
+                <!-- Bubbles -->
+                <div class="bubbles" id="bubbles-container">
+                    <!-- Bubbles injected via JS -->
+                </div>
+            </div>
+
+            <!-- Content Layer (Unfiltered) -->
+            <div class="footer-content max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 mb-16">
+                <div class="max-w-sm space-y-6">
+                    <div class="flex items-center gap-2">
+                        <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                            class="h-8 w-auto rounded bg-white p-0.5 object-contain">
+                        <span class="font-bold text-lg">EDU CREATIVITY CENTER</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Empowering students worldwide to unlock their creative potential through the mastery of the
+                        English language.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-white">Quick Links</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="courses.html" class="hover:text-brand-pink transition-colors">Courses
+                                    Catalog</a></li>
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Pricing Plans</a></li>
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Student Stories</a></li>
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-white">Legal</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Terms of Service</a></li>
+                            <li><a href="#" class="hover:text-brand-pink transition-colors">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold text-white">Socials</h4>
+
+                        <!-- Social Buttons HTML -->
+                        <div class="main">
+                            <div class="up">
+                                <a href="https://www.instagram.com/" target="_blank" class="card1">
+                                    <svg class="instagram" fill-rule="nonzero" height="30px" width="30px"
+                                        viewBox="0,0,256,256" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g style="mix-blend-mode: normal" text-anchor="none" font-size="none"
+                                            font-weight="none" font-family="none" stroke-dashoffset="0"
+                                            stroke-dasharray="" stroke-miterlimit="10" stroke-linejoin="miter"
+                                            stroke-linecap="butt" stroke-width="1" stroke="none" fill-rule="nonzero">
+                                            <g transform="scale(8,8)">
+                                                <path
+                                                    d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a>
+                                <a href="https://web.facebook.com/profile.php?id=61587546087301&locale=ar_AR"
+                                    target="_blank" class="card2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                        class="facebook" width="24">
+                                        <path
+                                            d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="down">
+                                <a href="https://wa.me/962798681269" target="_blank" class="card3">
+                                    <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                        class="whatsapp">
+                                        <path
+                                            d="M19.001 4.908A9.817 9.817 0 0 0 11.992 2C6.534 2 2.085 6.448 2.08 11.908c0 1.748.458 3.45 1.321 4.956L2 22l5.255-1.377a9.916 9.916 0 0 0 4.737 1.206h.005c5.46 0 9.908-4.448 9.913-9.913A9.872 9.872 0 0 0 19 4.908h.001ZM11.992 20.15A8.216 8.216 0 0 1 7.797 19l-.3-.18-3.117.818.833-3.041-.196-.314a8.2 8.2 0 0 1-1.258-4.381c0-4.533 3.696-8.23 8.239-8.23a8.2 8.2 0 0 1 5.825 2.413 8.196 8.196 0 0 1 2.41 5.825c-.006 4.55-3.702 8.24-8.24 8.24Zm4.52-6.167c-.247-.124-1.463-.723-1.692-.808-.228-.08-.394-.123-.556.124-.166.246-.641.808-.784.969-.143.166-.29.185-.537.062-.247-.125-1.045-.385-1.99-1.23-.738-.657-1.232-1.47-1.38-1.716-.142-.247-.013-.38.11-.504.11-.11.247-.29.37-.432.126-.143.167-.248.248-.413.082-.167.043-.31-.018-.433-.063-.124-.557-1.345-.765-1.838-.2-.486-.404-.419-.557-.425-.142-.009-.309-.009-.475-.009a.911.911 0 0 0-.661.31c-.228.247-.864.845-.864 2.067 0 1.22.888 2.395 1.013 2.56.122.167 1.742 2.666 4.229 3.74.587.257 1.05.408 1.41.523.595.19 1.13.162 1.558.1.475-.072 1.464-.6 1.673-1.178.205-.58.205-1.075.142-1.18-.061-.104-.227-.165-.475-.29Z">
+                                        </path>
+                                    </svg>
+                                </a>
+                                <a href="mailto:info@educreativitycenter.com" class="card4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                        class="gmail" width="24">
+                                        <path
+                                            d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Provided CSS -->
+                        <style>
+                            .main {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 0.5em;
+                            }
+
+                            .up {
+                                display: flex;
+                                flex-direction: row;
+                                gap: 0.5em;
+                            }
+
+                            .down {
+                                display: flex;
+                                flex-direction: row;
+                                gap: 0.5em;
+                            }
+
+                            .card1 {
+                                width: 90px;
+                                height: 90px;
+                                outline: none;
+                                border: none;
+                                background: white;
+                                border-radius: 90px 5px 5px 5px;
+                                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                                transition: .2s ease-in-out;
+                                cursor: pointer;
+                                /* Added for <a> wrapper consistency */
+                                display: flex;
+                                /* Centering fix for <a> */
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .instagram {
+                                /* margin-top: 1.5em; */
+                                /* Removed margin adjustment as flexbox centers it better, but user said DO NOT EDIT CSS. Reverting to exact user CSS. */
+                                margin-top: 1.5em;
+                                margin-left: 1.2em;
+                                fill: #cc39a4;
+                            }
+
+                            .card2 {
+                                width: 90px;
+                                height: 90px;
+                                outline: none;
+                                border: none;
+                                background: white;
+                                border-radius: 5px 90px 5px 5px;
+                                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                                transition: .2s ease-in-out;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .facebook {
+                                margin-top: 1.5em;
+                                margin-left: -.9em;
+                                fill: #03A9F4;
+                            }
+
+                            .card3 {
+                                width: 90px;
+                                height: 90px;
+                                outline: none;
+                                border: none;
+                                background: white;
+                                border-radius: 5px 5px 5px 90px;
+                                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                                transition: .2s ease-in-out;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .whatsapp {
+                                margin-top: -.6em;
+                                margin-left: 1.2em;
+                                fill: #00ff00;
+                            }
+
+                            .card4 {
+                                width: 90px;
+                                height: 90px;
+                                outline: none;
+                                border: none;
+                                background: white;
+                                border-radius: 5px 5px 90px 5px;
+                                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                                transition: .2s ease-in-out;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .gmail {
+                                margin-top: -.9em;
+                                margin-left: -1.2em;
+                                fill: #f14336;
+                            }
+
+                            .card1:hover {
+                                cursor: pointer;
+                                scale: 1.1;
+                                background-color: #cc39a4;
+                            }
+
+                            .card1:hover .instagram {
+                                fill: white;
+                            }
+
+                            .card2:hover {
+                                cursor: pointer;
+                                scale: 1.1;
+                                background-color: #1877f2;
+                            }
+
+                            .card2:hover .facebook {
+                                fill: white;
+                            }
+
+                            .card3:hover {
+                                cursor: pointer;
+                                scale: 1.1;
+                                background-color: #00ff00;
+                            }
+
+                            .card3:hover .whatsapp {
+                                fill: white;
+                            }
+
+                            .card4:hover {
+                                cursor: pointer;
+                                scale: 1.1;
+                                background-color: #FF0004;
+                            }
+
+                            .card4:hover .gmail {
+                                fill: white;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-content text-center text-xs text-gray-600 border-t border-white/5 pt-8 relative z-20">
+                © 2024 EDU CREATIVITY CENTER. All rights reserved.
+            </div>
+        </footer>
+
+        <!-- SVG Filter for Bubbles -->
+        <svg style="position:fixed; top:100vh; width:0; height:0; pointer-events:none;">
+            <defs>
+                <filter id="blob">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                        result="blob"></feColorMatrix>
+                </filter>
+            </defs>
+        </svg>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const bubblesContainer = document.getElementById('bubbles-container');
+                if (bubblesContainer) {
+                    for (let i = 0; i < 64; i++) { // Using 64 for performance
+                        const bubble = document.createElement('div');
+                        bubble.classList.add('bubble');
+
+                        const size = 2 + Math.random() * 4;
+                        const distance = 4 + Math.random() * 4;
+                        const position = -5 + Math.random() * 110;
+                        const time = 2 + Math.random() * 2;
+                        const delay = -1 * (2 + Math.random() * 2);
+
+                        bubble.style.setProperty('--size', `${size}rem`);
+                        bubble.style.setProperty('--distance', `${distance}rem`);
+                        bubble.style.setProperty('--position', `${position}%`);
+                        bubble.style.setProperty('--time', `${time}s`);
+                        bubble.style.setProperty('--delay', `${delay}s`);
+
+                        bubblesContainer.appendChild(bubble);
+                    }
+                }
+            });
+        </script>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+        // Removed Three.js wave to match clean image aesthetic
+    </script>
+
+</body>
+
+</html>

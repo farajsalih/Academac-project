@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-on-1 Personalized | EDU CREATIVITY CENTER</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg?v=1">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <!-- Tailwind & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#E11D48',
+                            pinkHover: '#BE123C',
+                            dark: '#0F172A',
+                            blue: '#0782c7',
+                            text: '#334155',
+                            heading: '#020617',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            'from': { opacity: '0', transform: 'translateY(20px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background-color: #FFFFFF;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #E11D48, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Timeline */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #E11D48, #0782c7, transparent);
+            transform: translateX(-50%);
+        }
+
+        /* Bubble Footer Styles */
+        .footer-container {
+            position: relative;
+            background: #020617;
+            overflow: hidden;
+        }
+
+        .gooey-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            filter: url('#goo');
+        }
+
+        .footer-base {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6rem;
+            background: #020617;
+        }
+
+        .bubble {
+            position: absolute;
+            background: #020617;
+            border-radius: 50%;
+            bottom: -4rem;
+            animation: bubble-move var(--duration, 4s) ease-in infinite, bubble-size var(--duration, 4s) ease-in infinite;
+        }
+
+        @keyframes bubble-size {
+
+            0%,
+            75% {
+                width: var(--size, 4rem);
+                height: var(--size, 4rem);
+            }
+
+            100% {
+                width: 0rem;
+                height: 0rem;
+            }
+        }
+
+        @keyframes bubble-move {
+            0% {
+                bottom: -4rem;
+            }
+
+            100% {
+                bottom: var(--distance, 10rem);
+            }
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Social Button CSS */
+        .main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+
+        .up {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+        }
+
+        .down {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+        }
+
+        .card1,
+        .card2,
+        .card3,
+        .card4 {
+            width: 90px;
+            height: 90px;
+            outline: none;
+            border: none;
+            background: white;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+            transition: .2s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card1 {
+            border-radius: 90px 5px 5px 5px;
+        }
+
+        .card2 {
+            border-radius: 5px 90px 5px 5px;
+        }
+
+        .card3 {
+            border-radius: 5px 5px 5px 90px;
+        }
+
+        .card4 {
+            border-radius: 5px 5px 90px 5px;
+        }
+
+        .instagram {
+            margin-top: 1.5em;
+            margin-left: 1.2em;
+            fill: #cc39a4;
+        }
+
+        .facebook {
+            margin-top: 1.5em;
+            margin-left: -.9em;
+            fill: #03A9F4;
+        }
+
+        .whatsapp {
+            margin-top: -.6em;
+            margin-left: 1.2em;
+            fill: #00ff00;
+        }
+
+        .gmail {
+            margin-top: -.9em;
+            margin-left: -1.2em;
+            fill: #f14336;
+        }
+
+        .card1:hover {
+            scale: 1.1;
+            background-color: #cc39a4;
+        }
+
+        .card1:hover .instagram {
+            fill: white;
+        }
+
+        .card2:hover {
+            scale: 1.1;
+            background-color: #1877f2;
+        }
+
+        .card2:hover .facebook {
+            fill: white;
+        }
+
+        .card3:hover {
+            scale: 1.1;
+            background-color: #00ff00;
+        }
+
+        .card3:hover .whatsapp {
+            fill: white;
+        }
+
+        .card4:hover {
+            scale: 1.1;
+            background-color: #FF0004;
+        }
+
+        .card4:hover .gmail {
+            fill: white;
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="w-full relative bg-white font-sans">
+
+    <!-- Fixed Background Elements -->
+    <!-- Animated Background -->
+    <iframe id="background-frame" src="background.html"
+        class="fixed inset-0 w-full h-full z-0 border-0 pointer-events-none" title="Background Animation"></iframe>
+    <script>
+        // Forward mouse movement to the background iframe for interactivity
+        document.addEventListener('mousemove', (e) => {
+            const iframe = document.getElementById('background-frame');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.dispatchEvent(new MouseEvent('mousemove', {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    bubbles: true
+                }));
+            }
+        });
+    </script>
+
+    <!-- Navigation -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <a href="generated-page.html"
+            class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+            <!-- Logo -->
+            <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                class="h-10 w-auto rounded-lg object-contain mix-blend-multiply">
+            <span class="text-brand-heading text-lg font-bold tracking-tight">EDU CREATIVITY CENTER</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-4">
+            <a href="generated-page.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Home</a>
+            <a href="about.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">About</a>
+            <a href="courses.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Courses</a>
+            <a href="contact.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Contact</a>
+        </nav>
+        <a href="login.html"
+            class="hidden md:inline-flex bg-brand-pink text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-brand-pinkHover transition-colors shadow-lg hover:shadow-brand-pink/30">
+            Enroll Now
+        </a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden min-h-screen flex items-center">
+        <!-- Background Blobs Removed -->
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="max-w-4xl mx-auto text-center space-y-8">
+                <span
+                    class="inline-block py-1 px-3 rounded-full bg-brand-pink/10 text-brand-pink text-xs font-bold tracking-widest uppercase mb-4 animate-fade-in-up">
+                    Tailored
+                </span>
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight animate-fade-in-up"
+                    style="animation-delay: 0.1s;">
+                    1-on-1 <span class="gradient-text">Personalized</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in-up"
+                    style="animation-delay: 0.2s;">
+                    Achieve your goals faster with dedicated private sessions tailored to your specific pace, schedule,
+                    and learning style.
+                </p>
+
+                <!-- Quick Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 animate-fade-in-up"
+                    style="animation-delay: 0.3s;">
+                    <div
+                        class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="w-12 h-12 bg-blue-100 text-brand-blue rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-1">Dedicated</h3>
+                        <p class="text-sm text-gray-500">Native Tutor</p>
+                    </div>
+                    <div
+                        class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="w-12 h-12 bg-brand-pink/10 text-brand-pink rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="clock" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-1">Flexible</h3>
+                        <p class="text-sm text-gray-500">Scheduling</p>
+                    </div>
+                    <div
+                        class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300 border-brand-pink/20">
+                        <div
+                            class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="tag" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-bold text-2xl text-brand-heading mb-1">$45</h3>
+                        <p class="text-sm text-gray-500">Per Session</p>
+                    </div>
+                </div>
+
+                <div class="pt-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <a href="login.html"
+                        class="inline-flex items-center gap-2 bg-brand-heading text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-800 transition-all hover:gap-4 shadow-xl hover:shadow-2xl">
+                        Book Session <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Description Section -->
+    <section class="py-20 relative overflow-hidden bg-slate-50">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4 reveal-on-scroll">
+                <span
+                    class="inline-block py-1 px-3 rounded-full bg-blue-100 text-brand-blue text-xs font-bold tracking-widest uppercase mb-2">
+                    Customized Learning
+                </span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-brand-heading tracking-tight">
+                    Focused Entirely On <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-pink to-orange-500">Your
+                        Specific Needs</span>
+                </h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    No generic lessons. No waiting for others. Every minute is dedicated to maximizing your personal
+                    progress and overcoming your unique challenges.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Main Content Column -->
+                <div class="lg:col-span-12 xl:col-span-8 space-y-12">
+
+                    <!-- What You Will Learn -->
+                    <div class="reveal-on-scroll">
+                        <h3 class="text-2xl font-bold text-brand-heading mb-8 flex items-center gap-3">
+                            <i data-lucide="target" class="w-6 h-6 text-brand-pink"></i>
+                            Maximize Your Potential
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Card 1 -->
+                            <div
+                                class="bg-white border border-gray-100 p-6 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group shadow-sm hover:shadow-md hover:border-brand-pink/30">
+                                <div
+                                    class="w-10 h-10 bg-brand-pink/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-brand-pink group-hover:text-white transition-colors">
+                                    <i data-lucide="zap" class="w-5 h-5 text-brand-pink group-hover:text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-brand-heading mb-2">Faster Progress</h4>
+                                <p class="text-sm text-gray-600">Learn at 2x the speed of group classes with immediate
+                                    correction and feedback.</p>
+                            </div>
+                            <!-- Card 2 -->
+                            <div
+                                class="bg-white border border-gray-100 p-6 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group shadow-sm hover:shadow-md hover:border-brand-blue/30">
+                                <div
+                                    class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-brand-blue group-hover:text-white transition-colors">
+                                    <i data-lucide="calendar-check"
+                                        class="w-5 h-5 text-brand-blue group-hover:text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-brand-heading mb-2">Flexible Schedule</h4>
+                                <p class="text-sm text-gray-600">Book sessions when it suits you. Reschedule easily if
+                                    life gets busy.</p>
+                            </div>
+                            <!-- Card 3 -->
+                            <div
+                                class="bg-white border border-gray-100 p-6 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group shadow-sm hover:shadow-md hover:border-purple-600/30">
+                                <div
+                                    class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                    <i data-lucide="crosshair"
+                                        class="w-5 h-5 text-purple-600 group-hover:text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-brand-heading mb-2">Targeted Focus</h4>
+                                <p class="text-sm text-gray-600">Concentrate on what YOU need: Business, IELTS,
+                                    Conversation, or Grammar.</p>
+                            </div>
+                            <!-- Card 4 -->
+                            <div
+                                class="bg-white border border-gray-100 p-6 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group shadow-sm hover:shadow-md hover:border-orange-500/30">
+                                <div
+                                    class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                    <i data-lucide="message-circle"
+                                        class="w-5 h-5 text-orange-500 group-hover:text-white"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-brand-heading mb-2">Confidence Building</h4>
+                                <p class="text-sm text-gray-600">A safe space to practice speaking without the fear of
+                                    judgment.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Curriculum Accordion -->
+                    <div id="curriculum" class="reveal-on-scroll">
+                        <h3 class="text-2xl font-bold text-brand-heading mb-8 flex items-center gap-3">
+                            <i data-lucide="layers" class="w-6 h-6 text-brand-blue"></i>
+                            Your Custom Plan
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- Module 1 -->
+                            <div
+                                class="border border-gray-200 rounded-xl overflow-hidden hover:border-brand-blue/30 transition-colors bg-white">
+                                <button
+                                    class="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                                    onclick="toggleAccordion('mod1')">
+                                    <div class="flex items-center gap-4">
+                                        <span
+                                            class="bg-brand-blue/10 text-brand-blue font-bold px-3 py-1 rounded text-sm">Focus
+                                            1</span>
+                                        <span class="font-bold text-lg text-brand-heading">Business Professional</span>
+                                    </div>
+                                    <i data-lucide="chevron-down" id="icon-mod1"
+                                        class="w-5 h-5 text-gray-400 transform transition-transform duration-300"></i>
+                                </button>
+                                <div id="mod1"
+                                    class="hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>Interview preparation and mock interviews.</li>
+                                        <li>Presentation coaching and slide review.</li>
+                                        <li>Negotiation tactics and vocabulary.</li>
+                                        <li>Professional email writing.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Module 2 -->
+                            <div
+                                class="border border-gray-200 rounded-xl overflow-hidden hover:border-brand-pink/30 transition-colors bg-white">
+                                <button
+                                    class="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                                    onclick="toggleAccordion('mod2')">
+                                    <div class="flex items-center gap-4">
+                                        <span
+                                            class="bg-brand-pink/10 text-brand-pink font-bold px-3 py-1 rounded text-sm">Focus
+                                            2</span>
+                                        <span class="font-bold text-lg text-brand-heading">Exam Preparation</span>
+                                    </div>
+                                    <i data-lucide="chevron-down" id="icon-mod2"
+                                        class="w-5 h-5 text-gray-400 transform transition-transform duration-300"></i>
+                                </button>
+                                <div id="mod2"
+                                    class="hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>IELTS / TOEFL strategy and practice.</li>
+                                        <li>Writing task correction and feedback.</li>
+                                        <li>Speaking mock tests under timed conditions.</li>
+                                        <li>Reading comprehension techniques.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Module 3 -->
+                            <div
+                                class="border border-gray-200 rounded-xl overflow-hidden hover:border-orange-400/30 transition-colors bg-white">
+                                <button
+                                    class="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                                    onclick="toggleAccordion('mod3')">
+                                    <div class="flex items-center gap-4">
+                                        <span
+                                            class="bg-orange-100 text-orange-600 font-bold px-3 py-1 rounded text-sm">Focus
+                                            3</span>
+                                        <span class="font-bold text-lg text-brand-heading">Conversation &
+                                            Fluency</span>
+                                    </div>
+                                    <i data-lucide="chevron-down" id="icon-mod3"
+                                        class="w-5 h-5 text-gray-400 transform transition-transform duration-300"></i>
+                                </button>
+                                <div id="mod3"
+                                    class="hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>Casual conversation practice on various topics.</li>
+                                        <li>Pronunciation and accent reduction.</li>
+                                        <li>Slang, idioms, and cultural nuances.</li>
+                                        <li>Building improved flow and confidence.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar / Right Column -->
+                <div class="lg:col-span-12 xl:col-span-4 space-y-8 reveal-on-scroll">
+
+                    <!-- Who is this for? -->
+                    <div class="bg-brand-heading text-white p-8 rounded-2xl shadow-xl relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2">
+                        </div>
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2 relative z-10">
+                            <i data-lucide="star" class="w-5 h-5 text-brand-pink"></i>
+                            Why Go Private?
+                        </h3>
+                        <ul class="space-y-4 relative z-10 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-green-400 shrink-0 mt-0.5"></i>
+                                <span class="text-sm">100% attention on YOU.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-green-400 shrink-0 mt-0.5"></i>
+                                <span class="text-sm">Immediate detailed feedback.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-green-400 shrink-0 mt-0.5"></i>
+                                <span class="text-sm">Flexible timing for busy schedules.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-green-400 shrink-0 mt-0.5"></i>
+                                <span class="text-sm">Custom materials for your goals.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Certificate Box -->
+                    <div class="border border-gray-200 bg-white p-8 rounded-2xl text-center shadow-sm">
+                        <div
+                            class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mx-auto mb-4 border border-gray-100">
+                            <i data-lucide="award" class="w-8 h-8 text-yellow-500"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-brand-heading mb-2">Track Your Progress</h4>
+                        <p class="text-sm text-gray-500 mb-6">Receive detailed progress reports after every block of 10
+                            sessions.</p>
+                        <a href="#enroll"
+                            class="inline-block w-full bg-white border-2 border-brand-heading text-brand-heading font-bold py-3 rounded-xl hover:bg-brand-heading hover:text-white transition-colors">
+                            Sample Report
+                        </a>
+                    </div>
+
+                    <!-- Quick CTA -->
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500 mb-4 font-medium uppercase tracking-widest">Limited Slots
+                            Available</p>
+                        <a href="login.html"
+                            class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-pink to-brand-pinkHover text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-lg hover:scale-105 transition-all w-full justify-center">
+                            Book First Session <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layout: Course Details & Journey -->
+    <section class="py-20 bg-white relative">
+        <div class="container mx-auto px-6 md:px-12">
+
+            <div class="flex flex-col lg:flex-row gap-16">
+                <!-- Left: Interactive Journey -->
+                <div class="flex-1">
+                    <h2 class="text-3xl font-bold mb-12">How It Works</h2>
+
+                    <div class="relative space-y-12">
+                        <!-- Connecting Line -->
+                        <div class="absolute left-8 top-4 bottom-4 w-0.5 bg-gray-200 lg:left-8"></div>
+
+                        <!-- Step 1 -->
+                        <div class="relative flex gap-8 group reveal-on-scroll">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 rounded-full bg-white border-4 border-brand-blue z-10 flex items-center justify-center font-bold text-xl text-brand-blue shadow-lg group-hover:scale-110 transition-transform">
+                                01</div>
+                            <div
+                                class="bg-slate-50 p-6 rounded-2xl flex-1 border border-gray-100 hover:shadow-lg transition-shadow">
+                                <h3 class="font-bold text-xl mb-2 text-brand-blue">Assessment & Goals</h3>
+                                <p class="text-gray-600 leading-relaxed">We start with a comprehensive assessment to
+                                    identify your level, strengths, weaknesses, and exact goals.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="relative flex gap-8 group reveal-on-scroll">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 rounded-full bg-white border-4 border-brand-pink z-10 flex items-center justify-center font-bold text-xl text-brand-pink shadow-lg group-hover:scale-110 transition-transform">
+                                02</div>
+                            <div
+                                class="bg-slate-50 p-6 rounded-2xl flex-1 border border-gray-100 hover:shadow-lg transition-shadow">
+                                <h3 class="font-bold text-xl mb-2 text-brand-pink">Custom Plan Creation</h3>
+                                <p class="text-gray-600 leading-relaxed">Your tutor designs a unique curriculum just for
+                                    you. No wasted time on things you already know.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="relative flex gap-8 group reveal-on-scroll">
+                            <div
+                                class="flex-shrink-0 w-16 h-16 rounded-full bg-white border-4 border-orange-400 z-10 flex items-center justify-center font-bold text-xl text-orange-400 shadow-lg group-hover:scale-110 transition-transform">
+                                03</div>
+                            <div
+                                class="bg-slate-50 p-6 rounded-2xl flex-1 border border-gray-100 hover:shadow-lg transition-shadow">
+                                <h3 class="font-bold text-xl mb-2 text-orange-400">Action & Results</h3>
+                                <p class="text-gray-600 leading-relaxed">Start your sessions, receive instant feedback,
+                                    and watch your skills improve week after week.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right: Sticky Enrollment Card -->
+                <div class="lg:w-[400px] relative reveal-on-scroll">
+                    <div class="sticky top-24 glass-panel p-8 rounded-3xl border-t-4 border-brand-pink shadow-2xl">
+                        <h3 class="text-2xl font-bold mb-6">Book Your Tutor</h3>
+
+                        <div class="flex items-baseline gap-2 mb-6">
+                            <span class="text-4xl font-extrabold text-brand-heading">$45</span>
+                            <span class="text-gray-500">/ session</span>
+                        </div>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center gap-3 text-sm text-gray-700">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500"></i> Free Initial
+                                Assessment
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-700">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500"></i> Choose Your own Time
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-700">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500"></i> Materials Included
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-700">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500"></i> Reschedule Anytime
+                            </li>
+                        </ul>
+
+                        <form id="enroll" class="space-y-4">
+                            <input type="text" placeholder="Full Name"
+                                class="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all">
+                            <input type="email" placeholder="Email Address"
+                                class="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all">
+                            <div class="relative">
+                                <select
+                                    class="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all appearance-none text-gray-500">
+                                    <option>Select Goal...</option>
+                                    <option>Business English</option>
+                                    <option>IELTS / Exam Prep</option>
+                                    <option>Conversation Focus</option>
+                                    <option>General Improvement</option>
+                                </select>
+                                <i data-lucide="chevron-down"
+                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <button type="button" onclick="window.location.href='login.html'"
+                                class="w-full bg-brand-pink text-white font-bold py-4 rounded-xl hover:bg-brand-pinkHover transform hover:scale-[1.02] transition-all shadow-lg">
+                                Secure First Session
+                            </button>
+                            <p class="text-xs text-center text-gray-400 pt-2">Secure SSL Encrypted Payment</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer-container pt-20 pb-10 px-6 md:px-12 lg:px-20 border-t border-white/5 text-white">
+        <!-- Background Layer (Filtered) -->
+        <div class="gooey-layer">
+            <div class="footer-base"></div>
+            <div class="bubbles" id="bubbles-container"></div>
+        </div>
+
+        <!-- Content Layer (Unfiltered) -->
+        <div class="footer-content max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 mb-16">
+            <div class="max-w-sm space-y-6">
+                <div class="flex items-center gap-2">
+                    <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                        class="h-8 w-auto rounded bg-white p-0.5 object-contain">
+                    <span class="font-bold text-lg">EDU CREATIVITY CENTER</span>
+                </div>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Empowering students worldwide to unlock their creative potential through the mastery of the
+                    English language.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="courses.html" class="hover:text-brand-pink transition-colors">Courses Catalog</a>
+                        </li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Pricing Plans</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Student Stories</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Socials</h4>
+
+                    <!-- Social Buttons HTML -->
+                    <div class="main">
+                        <div class="up">
+                            <a href="https://www.instagram.com/" target="_blank" class="card1">
+                                <svg class="instagram" fill-rule="nonzero" height="30px" width="30px"
+                                    viewBox="0,0,256,256" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g style="mix-blend-mode: normal" text-anchor="none" font-size="none"
+                                        font-weight="none" font-family="none" stroke-dashoffset="0" stroke-dasharray=""
+                                        stroke-miterlimit="10" stroke-linejoin="miter" stroke-linecap="butt"
+                                        stroke-width="1" stroke="none" fill-rule="nonzero">
+                                        <g transform="scale(8,8)">
+                                            <path
+                                                d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                            <a href="https://web.facebook.com/profile.php?id=61587546087301&locale=ar_AR"
+                                target="_blank" class="card2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                    class="facebook" width="24">
+                                    <path
+                                        d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="down">
+                            <a href="https://wa.me/962798681269" target="_blank" class="card3">
+                                <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    class="whatsapp">
+                                    <path
+                                        d="M19.001 4.908A9.817 9.817 0 0 0 11.992 2C6.534 2 2.085 6.448 2.08 11.908c0 1.748.458 3.45 1.321 4.956L2 22l5.255-1.377a9.916 9.916 0 0 0 4.737 1.206h.005c5.46 0 9.908-4.448 9.913-9.913A9.872 9.872 0 0 0 19 4.908h.001ZM11.992 20.15A8.216 8.216 0 0 1 7.797 19l-.3-.18-3.117.818.833-3.041-.196-.314a8.2 8.2 0 0 1-1.258-4.381c0-4.533 3.696-8.23 8.239-8.23a8.2 8.2 0 0 1 5.825 2.413 8.196 8.196 0 0 1 2.41 5.825c-.006 4.55-3.702 8.24-8.24 8.24Zm4.52-6.167c-.247-.124-1.463-.723-1.692-.808-.228-.08-.394-.123-.556.124-.166.246-.641.808-.784.969-.143.166-.29.185-.537.062-.247-.125-1.045-.385-1.99-1.23-.738-.657-1.232-1.47-1.38-1.716-.142-.247-.013-.38.11-.504.11-.11.247-.29.37-.432.126-.143.167-.248.248-.413.082-.167.043-.31-.018-.433-.063-.124-.557-1.345-.765-1.838-.2-.486-.404-.419-.557-.425-.142-.009-.309-.009-.475-.009a.911.911 0 0 0-.661.31c-.228.247-.864.845-.864 2.067 0 1.22.888 2.395 1.013 2.56.122.167 1.742 2.666 4.229 3.74.587.257 1.05.408 1.41.523.595.19 1.13.162 1.558.1.475-.072 1.464-.6 1.673-1.178.205-.58.205-1.075.142-1.18-.061-.104-.227-.165-.475-.29Z">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="mailto:info@educreativitycenter.com" class="card4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                    class="gmail" width="24">
+                                    <path
+                                        d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-content text-center text-xs text-gray-600 border-t border-white/5 pt-8 relative z-20">
+            © 2024 EDU CREATIVITY CENTER. All rights reserved.
+        </div>
+    </footer>
+
+
+    <!-- SVG Filter for Bubbles -->
+    <svg style="position:fixed; top:100vh; width:0; height:0; pointer-events:none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                    result="goo"></feColorMatrix>
+                <feComposite in="SourceGraphic" in2="goo" operator="atop"></feComposite>
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        // Bubble Generation
+        document.addEventListener('DOMContentLoaded', function () {
+            const bubblesContainer = document.getElementById('bubbles-container');
+            if (bubblesContainer) {
+                for (let i = 0; i < 40; i++) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+
+                    const size = 2 + Math.random() * 6;
+                    const distance = 6 + Math.random() * 8;
+                    const position = -10 + Math.random() * 120;
+                    const time = 3 + Math.random() * 5;
+                    const delay = -1 * (Math.random() * 5);
+
+                    bubble.style.setProperty('--size', `${size}rem`);
+                    bubble.style.setProperty('--distance', `${distance}rem`);
+                    bubble.style.setProperty('--position', `${position}%`);
+                    bubble.style.setProperty('--duration', `${time}s`);
+                    bubble.style.setProperty('--delay', `${delay}s`);
+
+                    bubblesContainer.appendChild(bubble);
+                }
+            }
+        });
+    </script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <script>
+        // Simple Accordion
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+    </script>
+    <script>
+        // Intersection Observer for Reveal on Scroll
+        document.addEventListener('DOMContentLoaded', function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+
+</html>

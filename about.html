@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | EDU CREATIVITY CENTER</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg?v=1">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <!-- Tailwind & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#E11D48',
+                            pinkHover: '#BE123C',
+                            dark: '#0F172A',
+                            blue: '#0782c7',
+                            text: '#334155',
+                            heading: '#020617',
+                        }
+                    },
+                    letterSpacing: {
+                        tight: '-0.02em',
+                        tighter: '-0.04em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background-color: #FFFFFF;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-200 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-300 {
+            transition-delay: 0.3s;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.reveal').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+    </style>
+</head>
+
+<body class="w-full relative bg-white font-sans">
+
+    <!-- Fixed Background Elements -->
+    <iframe id="background-frame" src="background.html"
+        class="fixed inset-0 w-full h-full z-0 border-0 pointer-events-none" title="Background Animation"></iframe>
+    <script>
+        // Forward mouse movement to the background iframe for interactivity
+        document.addEventListener('mousemove', (e) => {
+            const iframe = document.getElementById('background-frame');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.dispatchEvent(new MouseEvent('mousemove', {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    bubbles: true
+                }));
+            }
+        });
+    </script>
+
+    <!-- Navigation -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <a href="generated-page.html"
+            class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+            <!-- Logo -->
+            <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                class="h-10 w-auto rounded-lg object-contain mix-blend-multiply">
+            <span class="text-brand-heading text-lg font-bold tracking-tight">EDU CREATIVITY CENTER</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-4">
+            <a href="generated-page.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Home</a>
+            <a href="about.html"
+                class="text-sm font-bold text-brand-pink bg-white px-6 py-2.5 rounded-full shadow-sm border border-brand-pink/30 shadow-md transition-all duration-300">About</a>
+            <a href="courses.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Courses</a>
+            <a href="contact.html"
+                class="text-sm font-bold text-brand-text bg-white px-6 py-2.5 rounded-full shadow-sm border border-gray-100 hover:border-brand-pink/30 hover:shadow-md hover:text-brand-pink transition-all duration-300">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+
+            <button onclick="window.location.href='login.html'"
+                class="relative bg-brand-pink text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-lg shadow-brand-pink/30 hover:bg-brand-pinkHover hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                Join Now
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex flex-col w-full pt-32">
+
+        <!-- Hero / Our Story Section -->
+        <section class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-24">
+            <div class="text-center mb-16 reveal delay-100">
+                <h1 class="text-5xl md:text-6xl font-bold text-brand-heading mb-6 tracking-tight">
+                    Our Story
+                </h1>
+                <p class="text-brand-pink text-xl md:text-2xl font-medium max-w-2xl mx-auto">
+                    Empowering creativity through English mastery.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center reveal delay-200">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-brand-heading">Where Language Meets Imagination</h2>
+                    <p class="text-lg text-brand-text leading-relaxed">
+                        At EDU Creativity Center, we believe that learning a language is more than just memorizing
+                        vocabulary and mastering grammar. It is about unlocking a new way to see the world and express
+                        your unique ideas.
+                    </p>
+                    <p class="text-lg text-brand-text leading-relaxed">
+                        Founded with the vision to blend English proficiency with creative thinking, our academy serves
+                        as a hub for innovators, dreamers, and global citizens. We use immersive methods that encourage
+                        students to think outside the box while building the confidence to speak fluently on any stage.
+                    </p>
+                    <div class="pt-4 flex space-x-6">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="badge-check" class="text-brand-blue w-6 h-6"></i>
+                            <span class="font-medium text-brand-heading">Certified Excellence</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="palette" class="text-brand-pink w-6 h-6"></i>
+                            <span class="font-medium text-brand-heading">Creative Pedagogy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-4 bg-brand-blue/10 rounded-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500">
+                    </div>
+                    <div
+                        class="absolute -inset-4 bg-brand-pink/10 rounded-2xl rotate-2 group-hover:rotate-0 transition-transform duration-500 delay-100">
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img class="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvuE1mnLRHxnRyZhfoqOpbyW2ukSqsOmrhmQjnhNUibG-WQ65krVlKsQSfqs_9WXWT5xrpr7Hwht8Ae2wGZIQmSx3YaaL2W3XeKlSwwf8P4d2nVCt9TjxVoRSjuJdyVvuV81egvIOLCNGRcf_aYpYFhf59psTBYgJLPWJWPyOoHcmmoJTKbqR1U3yudil3JyWlG6366FZqWCCiwG4Z3OIo5MqtOaOqLpKhWU83wXjnPD3ZghBwQ_RmOEQLq_Eg37DO3vChxolhtgo"
+                            alt="Modern classroom">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values Section -->
+        <section class="py-24 bg-slate-50 border-y border-gray-100">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-4xl font-bold text-brand-heading mb-4">Our Values</h2>
+                    <div class="h-1.5 w-24 bg-brand-heading mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 reveal delay-200">
+                    <!-- Innovation -->
+                    <div
+                        class="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                        <div
+                            class="w-16 h-16 bg-brand-blue/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="lightbulb" class="w-8 h-8 text-brand-blue group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-heading mb-4">Innovation</h3>
+                        <p class="text-brand-text">We constantly evolve our teaching methods to integrate the latest
+                            technology and creative tools, ensuring a future-ready education.</p>
+                    </div>
+
+                    <!-- Excellence -->
+                    <div
+                        class="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                        <div
+                            class="w-16 h-16 bg-yellow-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="star" class="w-8 h-8 text-yellow-600 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-heading mb-4">Excellence</h3>
+                        <p class="text-brand-text">Our standards are set high to ensure every student achieves fluency
+                            and mastery that opens doors to international opportunities.</p>
+                    </div>
+
+                    <!-- Community -->
+                    <div
+                        class="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                        <div
+                            class="w-16 h-16 bg-brand-pink/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-pink group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="users" class="w-8 h-8 text-brand-pink group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-heading mb-4">Community</h3>
+                        <p class="text-brand-text">We foster a supportive environment where students from diverse
+                            backgrounds collaborate and learn from each other's perspectives.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet Our Leadership Section -->
+        <section class="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-brand-heading mb-4">Meet Our Leadership</h2>
+                <p class="text-brand-text max-w-2xl mx-auto">The visionary minds behind our creative approach to
+                    language education.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 reveal delay-200">
+                <!-- Leader 1 -->
+                <div class="text-center group">
+                    <div class="relative w-48 h-48 mx-auto mb-6">
+                        <div
+                            class="absolute inset-0 rounded-full border-2 border-brand-blue border-dashed group-hover:rotate-180 transition-transform duration-1000">
+                        </div>
+                        <div class="absolute inset-2 rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtdljzayiXf2h4pAcb3XB45lO9fe42qk7qrvfZZfgMoMKk8yT0slsDSKtw31YGdTOeNNtr0xlBgG8ROOevgsTn5PEDGloV-Ugq_-emnwrev6GLyOqBoJBqXZHTngt_xTuOBocy4S6vBl040h1lriviU1JAtYsS1o05ktIUucK3t1JdB3Rv9hVSKQTbxqGRmsJsOt9qai3LesxVk20zvVePMk9GjKX0hPrlgiF6_-GZpVXvixjsyNAoMhSC5V61VFNtJhVMHdhH-Tw"
+                                alt="Dr. Sarah Jensen">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-heading">Dr. Sarah Jensen</h4>
+                    <p class="text-brand-blue font-medium mb-2">Founder &amp; Academic Director</p>
+                    <p class="text-sm text-gray-500">20+ years of experience in linguistic innovation.</p>
+                </div>
+
+                <!-- Leader 2 -->
+                <div class="text-center group">
+                    <div class="relative w-48 h-48 mx-auto mb-6">
+                        <div
+                            class="absolute inset-0 rounded-full border-2 border-brand-pink border-dashed group-hover:rotate-180 transition-transform duration-1000">
+                        </div>
+                        <div class="absolute inset-2 rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwTAUeTKccLdYUdWPpMHqqnE5gPMg2Fj6GZ0wPZKixZp57-GRTpAMm_30BVsjFlWvVgCB66_gxeGJe-h4Cb-fBfETVKsw56yWA8M1DKLZv5-SAMYlhJJ9kjR0HY7N3x737sDyZmTDAXgv5n-zW6rHXvckB9pEOmGSk7tTQBEf7P6ThvFpvt5L0Rf2ItsUU4e1gH99Vo__YYPocA_hZ2xXpsTdt27XEYxoZ5R4fLwuz-Z7oNtu7yuBUUbPJrb3RS6dGfaHLAjuDAbo"
+                                alt="Marcus Chen">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-heading">Marcus Chen</h4>
+                    <p class="text-brand-pink font-medium mb-2">Head of Creative Arts</p>
+                    <p class="text-sm text-gray-500">Specialist in blending storytelling with language acquisition.</p>
+                </div>
+
+                <!-- Leader 3 -->
+                <div class="text-center group">
+                    <div class="relative w-48 h-48 mx-auto mb-6">
+                        <div
+                            class="absolute inset-0 rounded-full border-2 border-yellow-500 border-dashed group-hover:rotate-180 transition-transform duration-1000">
+                        </div>
+                        <div class="absolute inset-2 rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXNaOab0uZki1ybzAsaYxbqV8Zw0bxZ-hRynKNee2fUQZ8tjV8Xvd4eUvTzaeiBl5ArY5cqkS4hTJH5lP3iyaMce5bNhDrIB4B58CA-Kuz-D8h1sxwQldsiuDuBF4fPrPpIkcrgXe2vfU2_El6yRa-u8sTiRdpPKztkX6z1o_HESVlor2SsdnZBOQnM-3_66T8yEuiLgNwvptG1xM1Vekkd2-0Mx6NcG1bRUgGx-As8sPk5wg8AwSVO1LPnKwpsVIgbrH8mAjMG3c"
+                                alt="Elena Rodriguez">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-heading">Elena Rodriguez</h4>
+                    <p class="text-yellow-600 font-medium mb-2">Operations Manager</p>
+                    <p class="text-sm text-gray-500">Dedicated to student success and seamless campus life.</p>
+                </div>
+
+                <!-- Leader 4 -->
+                <div class="text-center group">
+                    <div class="relative w-48 h-48 mx-auto mb-6">
+                        <div
+                            class="absolute inset-0 rounded-full border-2 border-brand-heading border-dashed group-hover:rotate-180 transition-transform duration-1000">
+                        </div>
+                        <div class="absolute inset-2 rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6SAROHDx0PErBACn5adgpO1IYz-M8k5evVdzfx6VOV-lylMbCGJU4BSzBTQ1Nf2D-8DI_4DjBigGxU70paOtCUAzIjVRJF7V3dVGKLgvZUJuU8waB6wJfpEyLELL78JmVDSKRLXsoxLYRxqD4fLur5N-Jy5DhL9ZizSjXk3cjTqPHyDUjYIFlyV0A8xbZuTAS1FY9rTAJYpvpSyXlsqkME9i3tEh4ZkVuCcB4gyVXT0Qhwt9tTKRGyAqio7SArENxKcjYoWMZSTs"
+                                alt="David Wilson">
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-bold text-brand-heading">David Wilson</h4>
+                    <p class="text-brand-heading font-medium mb-2">Director of Technology</p>
+                    <p class="text-sm text-gray-500">Pioneering digital immersive tools for language learning.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <!-- FOOTER with Bubbles -->
+    <style>
+        .footer-container {
+            position: relative;
+            /* Background is provided by the gooey layer */
+            background: transparent;
+            z-index: 10;
+        }
+
+        .gooey-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: url("#blob");
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .footer-base {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #020617;
+        }
+
+        .bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .bubble {
+            position: absolute;
+            left: var(--position, 50%);
+            background: #020617;
+            border-radius: 100%;
+            animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s),
+                bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
+            transform: translate(-50%, 100%);
+            bottom: 0;
+        }
+
+        @keyframes bubble-size {
+
+            0%,
+            75% {
+                width: var(--size, 4rem);
+                height: var(--size, 4rem);
+            }
+
+            100% {
+                width: 0rem;
+                height: 0rem;
+            }
+        }
+
+        @keyframes bubble-move {
+            0% {
+                bottom: -4rem;
+            }
+
+            100% {
+                bottom: var(--distance, 10rem);
+            }
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 20;
+        }
+    </style>
+
+    <footer class="footer-container pt-20 pb-10 px-6 md:px-12 lg:px-20 border-t border-white/5 text-white">
+        <!-- Background Layer (Filtered) -->
+        <div class="gooey-layer">
+            <div class="footer-base"></div>
+            <div class="bubbles" id="bubbles-container"></div>
+        </div>
+
+        <!-- Content Layer (Unfiltered) -->
+        <div class="footer-content max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 mb-16">
+            <div class="max-w-sm space-y-6">
+                <div class="flex items-center gap-2">
+                    <img src="logo.svg" alt="EDU CREATIVITY CENTER Logo"
+                        class="h-8 w-auto rounded bg-white p-0.5 object-contain">
+                    <span class="font-bold text-lg">EDU CREATIVITY CENTER</span>
+                </div>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Empowering students worldwide to unlock their creative potential through the mastery of the
+                    English language.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="courses.html" class="hover:text-brand-pink transition-colors">Courses Catalog</a>
+                        </li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Pricing Plans</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Student Stories</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-pink transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white">Socials</h4>
+
+                    <!-- Social Buttons HTML -->
+                    <div class="main">
+                        <div class="up">
+                            <a href="https://www.instagram.com/" target="_blank" class="card1">
+                                <svg class="instagram" fill-rule="nonzero" height="30px" width="30px"
+                                    viewBox="0,0,256,256" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g style="mix-blend-mode: normal" text-anchor="none" font-size="none"
+                                        font-weight="none" font-family="none" stroke-dashoffset="0" stroke-dasharray=""
+                                        stroke-miterlimit="10" stroke-linejoin="miter" stroke-linecap="butt"
+                                        stroke-width="1" stroke="none" fill-rule="nonzero">
+                                        <g transform="scale(8,8)">
+                                            <path
+                                                d="M11.46875,5c-3.55078,0 -6.46875,2.91406 -6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078 -2.91406,-6.46875 -6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266 -1.99609,4.46875 -4.46875,4.46875h-9.0625c-2.47266,0 -4.46875,-1.99609 -4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0 -0.90625,0.40234 -0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391 -0.40234,-0.90625 -0.90625,-0.90625zM16,10c-3.30078,0 -6,2.69922 -6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078 -2.69922,-6 -6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266 -1.77734,4 -4,4c-2.22266,0 -4,-1.77734 -4,-4c0,-2.22266 1.77734,-4 4,-4z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                            <a href="https://web.facebook.com/profile.php?id=61587546087301&locale=ar_AR"
+                                target="_blank" class="card2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                    class="facebook" width="24">
+                                    <path
+                                        d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="down">
+                            <a href="https://wa.me/962798681269" target="_blank" class="card3">
+                                <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    class="whatsapp">
+                                    <path
+                                        d="M19.001 4.908A9.817 9.817 0 0 0 11.992 2C6.534 2 2.085 6.448 2.08 11.908c0 1.748.458 3.45 1.321 4.956L2 22l5.255-1.377a9.916 9.916 0 0 0 4.737 1.206h.005c5.46 0 9.908-4.448 9.913-9.913A9.872 9.872 0 0 0 19 4.908h.001ZM11.992 20.15A8.216 8.216 0 0 1 7.797 19l-.3-.18-3.117.818.833-3.041-.196-.314a8.2 8.2 0 0 1-1.258-4.381c0-4.533 3.696-8.23 8.239-8.23a8.2 8.2 0 0 1 5.825 2.413 8.196 8.196 0 0 1 2.41 5.825c-.006 4.55-3.702 8.24-8.24 8.24Zm4.52-6.167c-.247-.124-1.463-.723-1.692-.808-.228-.08-.394-.123-.556.124-.166.246-.641.808-.784.969-.143.166-.29.185-.537.062-.247-.125-1.045-.385-1.99-1.23-.738-.657-1.232-1.47-1.38-1.716-.142-.247-.013-.38.11-.504.11-.11.247-.29.37-.432.126-.143.167-.248.248-.413.082-.167.043-.31-.018-.433-.063-.124-.557-1.345-.765-1.838-.2-.486-.404-.419-.557-.425-.142-.009-.309-.009-.475-.009a.911.911 0 0 0-.661.31c-.228.247-.864.845-.864 2.067 0 1.22.888 2.395 1.013 2.56.122.167 1.742 2.666 4.229 3.74.587.257 1.05.408 1.41.523.595.19 1.13.162 1.558.1.475-.072 1.464-.6 1.673-1.178.205-.58.205-1.075.142-1.18-.061-.104-.227-.165-.475-.29Z">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a href="mailto:info@educreativitycenter.com" class="card4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                    class="gmail" width="24">
+                                    <path
+                                        d="M6 12C6 15.3137 8.68629 18 12 18C14.6124 18 16.8349 16.3304 17.6586 14H12V10H21.8047V14H21.8C20.8734 18.5645 16.8379 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.445 2 18.4831 3.742 20.2815 6.39318L17.0039 8.68815C15.9296 7.06812 14.0895 6 12 6C8.68629 6 6 8.68629 6 12Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Provided CSS -->
+                    <style>
+                        .main {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.5em;
+                        }
+
+                        .up {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 0.5em;
+                        }
+
+                        .down {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 0.5em;
+                        }
+
+                        .card1 {
+                            width: 90px;
+                            height: 90px;
+                            outline: none;
+                            border: none;
+                            background: white;
+                            border-radius: 90px 5px 5px 5px;
+                            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                            transition: .2s ease-in-out;
+                            cursor: pointer;
+                            /* Added for <a> wrapper consistency */
+                            display: flex;
+                            /* Centering fix for <a> */
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .instagram {
+                            /* margin-top: 1.5em; */
+                            /* Removed margin adjustment as flexbox centers it better, but user said DO NOT EDIT CSS. Reverting to exact user CSS. */
+                            margin-top: 1.5em;
+                            margin-left: 1.2em;
+                            fill: #cc39a4;
+                        }
+
+                        .card2 {
+                            width: 90px;
+                            height: 90px;
+                            outline: none;
+                            border: none;
+                            background: white;
+                            border-radius: 5px 90px 5px 5px;
+                            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                            transition: .2s ease-in-out;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .facebook {
+                            margin-top: 1.5em;
+                            margin-left: -.9em;
+                            fill: #03A9F4;
+                        }
+
+                        .card3 {
+                            width: 90px;
+                            height: 90px;
+                            outline: none;
+                            border: none;
+                            background: white;
+                            border-radius: 5px 5px 5px 90px;
+                            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                            transition: .2s ease-in-out;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .whatsapp {
+                            margin-top: -.6em;
+                            margin-left: 1.2em;
+                            fill: #00ff00;
+                        }
+
+                        .card4 {
+                            width: 90px;
+                            height: 90px;
+                            outline: none;
+                            border: none;
+                            background: white;
+                            border-radius: 5px 5px 90px 5px;
+                            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                            transition: .2s ease-in-out;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .gmail {
+                            margin-top: -.9em;
+                            margin-left: -1.2em;
+                            fill: #f14336;
+                        }
+
+                        .card1:hover {
+                            cursor: pointer;
+                            scale: 1.1;
+                            background-color: #cc39a4;
+                        }
+
+                        .card1:hover .instagram {
+                            fill: white;
+                        }
+
+                        .card2:hover {
+                            cursor: pointer;
+                            scale: 1.1;
+                            background-color: #1877f2;
+                        }
+
+                        .card2:hover .facebook {
+                            fill: white;
+                        }
+
+                        .card3:hover {
+                            cursor: pointer;
+                            scale: 1.1;
+                            background-color: #00ff00;
+                        }
+
+                        .card3:hover .whatsapp {
+                            fill: white;
+                        }
+
+                        .card4:hover {
+                            cursor: pointer;
+                            scale: 1.1;
+                            background-color: #FF0004;
+                        }
+
+                        .card4:hover .gmail {
+                            fill: white;
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+        <div class="footer-content text-center text-xs text-gray-600 border-t border-white/5 pt-8 relative z-20">
+            © 2024 EDU CREATIVITY CENTER. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- SVG Filter for Bubbles -->
+    <svg style="position:fixed; top:100vh; width:0; height:0; pointer-events:none;">
+        <defs>
+            <filter id="blob">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                    result="blob"></feColorMatrix>
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bubblesContainer = document.getElementById('bubbles-container');
+            if (bubblesContainer) {
+                for (let i = 0; i < 64; i++) { // Using 64 for performance
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bubble');
+
+                    const size = 2 + Math.random() * 4;
+                    const distance = 4 + Math.random() * 4;
+                    const position = -5 + Math.random() * 110;
+                    const time = 2 + Math.random() * 2;
+                    const delay = -1 * (2 + Math.random() * 2);
+
+                    bubble.style.setProperty('--size', `${size}rem`);
+                    bubble.style.setProperty('--distance', `${distance}rem`);
+                    bubble.style.setProperty('--position', `${position}%`);
+                    bubble.style.setProperty('--time', `${time}s`);
+                    bubble.style.setProperty('--delay', `${delay}s`);
+
+                    bubblesContainer.appendChild(bubble);
+                }
+            }
+        });
+    </script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
