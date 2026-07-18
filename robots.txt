@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+Disallow: /scratch/
+Sitemap: https://educerativitycenter.com/sitemap.xml

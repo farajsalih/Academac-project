@@ -216,7 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const provinces = provincesData[val] || [];
 
                 // Reset Province
-                provinceSelect.innerHTML = '<option value="">اختر المنطقة</option>';
+                const lang = document.documentElement.lang || 'en';
+                const defaultOption = lang === 'ar' ? 'اختر المنطقة' : 'Select Region';
+                provinceSelect.innerHTML = `<option value="">${defaultOption}</option>`;
 
                 if (provinces.length > 0) {
                     provinceGroup.classList.remove('hidden');
@@ -260,54 +262,115 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handleFormSubmit(e) {
+    async function handleFormSubmit(e) {
         e.preventDefault();
-        if (validateCurrentStep()) {
-            if (loadingOverlay) loadingOverlay.style.display = 'flex';
+        if (!validateCurrentStep()) return;
 
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                if (data[key]) {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                } else {
-                    data[key] = value;
-                }
+        // 1. Resolve API Base URL safely
+        const hostname = window.location.hostname;
+        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
+        
+        let apiBaseUrl = window.EDUCORE_CONFIG?.apiBaseUrl;
+        
+        const lang = document.documentElement.lang || 'en';
+        const t = {
+            en: {
+                tempUnavailable: "Online registration is temporarily unavailable. Please contact the academy through WhatsApp: https://wa.me/962782610108",
+                duplicatePhone: "It appears that a registration with this phone number was recently submitted. Please contact the academy if you need assistance.",
+                tooManyRequests: "Too many requests. Please try again later.",
+                invalidData: "Invalid form data. Please check your inputs.",
+                forbidden: "Access forbidden. Origin not allowed.",
+                generalError: "An error occurred. Please try again later.",
+                networkError: "Network error. Please try again later."
+            },
+            ar: {
+                tempUnavailable: "التسجيل الإلكتروني غير متاح مؤقتاً. يرجى التواصل مع الأكاديمية عبر واتساب: https://wa.me/962782610108",
+                duplicatePhone: "يبدو أنه تم تقديم تسجيل بهذا الرقم مؤخرًا. يرجى التواصل مع الأكاديمية إذا كنت بحاجة للمساعدة.",
+                tooManyRequests: "طلبات كثيرة جداً. يرجى المحاولة لاحقاً.",
+                invalidData: "بيانات النموذج غير صالحة. يرجى التحقق من المدخلات.",
+                forbidden: "الوصول محظور. المصدر غير مسموح به.",
+                generalError: "حدث خطأ. يرجى المحاولة لاحقاً.",
+                networkError: "خطأ في الشبكة. يرجى المحاولة لاحقاً."
+            }
+        }[lang];
+
+        if (!apiBaseUrl) {
+            if (isLocal) {
+                apiBaseUrl = 'http://localhost:3000'; // Default for local development
+            } else {
+                alert(t.tempUnavailable);
+                return;
+            }
+        }
+
+        const endpointUrl = `${apiBaseUrl.replace(/\/+$/, '')}/api/leads/create`;
+
+        if (loadingOverlay) loadingOverlay.style.display = 'flex';
+
+        // 2. Prepare payload exactly matching Zod schema
+        const formData = new FormData(form);
+        const rawData = Object.fromEntries(formData.entries());
+
+        let phoneVal = rawData.phone || '';
+        if (rawData.countryCode && phoneVal) {
+            const code = rawData.countryCode.replace('+', '');
+            phoneVal = code + phoneVal;
+        }
+
+        const payload = {
+            full_name: rawData.fullName || '',
+            phone: phoneVal,
+            email: rawData.email || '',
+            nationality: rawData.nationality === 'أخرى' ? (rawData.nationalityOther || '') : (rawData.nationality || ''),
+            country: rawData.country || '',
+            city: rawData.province || '',
+            learning_goal: rawData.goal || '',
+            current_english_level: rawData.level || '',
+            preferred_schedule: rawData.days || '',
+            preferred_time: rawData.time || '',
+            payment_method: rawData.paymentMethod || '',
+            payment_plan: rawData.paymentPlan || ''
+        };
+
+        // 3. Send Request
+        try {
+            const response = await fetch(endpointUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
             });
 
-            // Handle phone with country code
-            if (data['countryCode'] && data['phone']) {
-                const code = data['countryCode'].replace('+', '');
-                data['phone'] = code + data['phone'];
-                // don't delete countryCode if you want to keep it separate or just keep phone
-            }
+            const result = await response.json().catch(() => ({}));
 
-            data['timestamp'] = new Date().toISOString();
-
-            // Send to Google Sheets (Example URL)
-            fetch('https://script.google.com/macros/s/AKfycbxGMNrY77f8FzaPBF4hwNuWG-IHF-bTtvduoPyo1GLAC12DN6P5XLODtQay31WI4Zd9Ow/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-                .then(() => {
-                    setTimeout(() => {
-                        if (loadingOverlay) loadingOverlay.style.display = 'none';
-                        currentStep++;
-                        updateUI();
-                        startConfetti();
-                        playSuccessSound();
-                    }, 1500);
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
+            if (response.ok && result.success !== false) {
+                setTimeout(() => {
                     if (loadingOverlay) loadingOverlay.style.display = 'none';
-                    alert('حدث خطأ. يرجى المحاولة لاحقاً.');
-                });
+                    currentStep++;
+                    updateUI();
+                    startConfetti();
+                    playSuccessSound();
+                }, 500);
+            } else {
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+                
+                if (response.status === 409 || result.code === "DUPLICATE_PHONE") {
+                    alert(t.duplicatePhone);
+                } else if (response.status === 429) {
+                    alert(t.tooManyRequests);
+                } else if (response.status === 400) {
+                    alert(t.invalidData);
+                } else if (response.status === 403) {
+                    alert(t.forbidden);
+                } else {
+                    alert(t.generalError);
+                }
+            }
+        } catch (error) {
+            console.error('Submission Error:', error);
+            if (loadingOverlay) loadingOverlay.style.display = 'none';
+            alert(t.networkError);
         }
     }
 
