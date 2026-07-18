@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="logo.svg?v=1">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg?v=1">
     <style>
         html,
         body {
@@ -14,7 +14,7 @@
 
         body {
             background: #ffffff;
-            /* ✅ white background */
+            /* âœ… white background */
             overflow: hidden;
             font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
         }
@@ -47,7 +47,7 @@
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setClearColor(0xffffff, 1); // ✅ pure white
+        renderer.setClearColor(0xffffff, 1); // âœ… pure white
         container.appendChild(renderer.domElement);
 
         // Geometry: organic base (NOT cube)
@@ -55,7 +55,7 @@
         const geometry = new THREE.IcosahedronGeometry(6.2, 6);
 
         // Convert to Points look (mesh-like / airy)
-        // Using Points + shader-driven color = soft “wire/mesh” vibe without heavy line rendering
+        // Using Points + shader-driven color = soft â€œwire/meshâ€ vibe without heavy line rendering
         const uniforms = {
             uTime: { value: 0 },
             uMouse: { value: new THREE.Vector2(0, 0) },
@@ -162,7 +162,7 @@
         float influence = smoothstep(5.0, 0.0, d); // closer = stronger
         pos += normalize(position) * (influence * 1.05);
 
-        // Subtle “breathing”
+        // Subtle â€œbreathingâ€
         float breathe = 0.10 * sin(uTime * 0.55);
         pos += normalize(position) * breathe;
 
