@@ -2,6 +2,9 @@
    WIZARD FORM LOGIC - FIXED
    ==================================== */
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Security & State ---
+    const formStartTime = Date.now();
+    let isSubmitting = false;
 
     // --- State ---
     let currentStep = 1;
@@ -18,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadingOverlay = document.getElementById('loadingOverlay');
     const confettiContainer = document.getElementById('confettiContainer');
+    const errorPage = document.getElementById('errorPage');
 
     // --- Dynamic Elements (Conditional Logic) ---
     // Section 2
@@ -49,11 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (step.id === `step-${currentStep}`) {
                 step.classList.remove('hidden');
                 step.classList.add('active');
+                
+                // Trigger animation
+                step.classList.remove('step-enter');
+                void step.offsetWidth; // Force reflow
+                step.classList.add('step-enter');
             } else if (step.id === 'thankyouPage' && currentStep > totalSteps) {
                 step.classList.remove('hidden');
+                step.classList.remove('step-enter');
+                void step.offsetWidth;
+                step.classList.add('step-enter');
             } else {
                 step.classList.add('hidden');
                 step.classList.remove('active');
+                step.classList.remove('step-enter');
             }
         });
 
@@ -242,7 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (validateCurrentStep()) {
                     currentStep++;
                     updateUI();
-                    window.scrollTo(0, 0);
+                    const mainPanel = document.querySelector('main');
+                    if (mainPanel) mainPanel.scrollTo({ top: 0, behavior: 'smooth' });
+                    else window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
@@ -252,7 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentStep > 1) {
                     currentStep--;
                     updateUI();
-                    window.scrollTo(0, 0);
+                    const mainPanel = document.querySelector('main');
+                    if (mainPanel) mainPanel.scrollTo({ top: 0, behavior: 'smooth' });
+                    else window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         }
@@ -264,11 +281,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleFormSubmit(e) {
         e.preventDefault();
+        
+        if (isSubmitting) return;
         if (!validateCurrentStep()) return;
+
+        isSubmitting = true;
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.setAttribute('aria-disabled', 'true');
+            if (!btnSubmit.dataset.originalHtml) {
+                btnSubmit.dataset.originalHtml = btnSubmit.innerHTML;
+            }
+            btnSubmit.innerHTML = '<span class="material-icons animate-spin">sync</span> جاري الإرسال...';
+        }
+
+        const unlockSubmit = () => {
+            isSubmitting = false;
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.removeAttribute('aria-disabled');
+                if (btnSubmit.dataset.originalHtml) {
+                    btnSubmit.innerHTML = btnSubmit.dataset.originalHtml;
+                }
+            }
+        };
 
         // 1. Resolve API Base URL safely
         const hostname = window.location.hostname;
-        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
+        const protocol = window.location.protocol;
+        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '' || protocol === 'file:';
         
         let apiBaseUrl = window.EDUCORE_CONFIG?.apiBaseUrl;
         
@@ -294,16 +335,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }[lang];
 
-        if (!apiBaseUrl) {
-            if (isLocal) {
-                apiBaseUrl = 'http://localhost:3000'; // Default for local development
-            } else {
-                alert(t.tempUnavailable);
-                return;
-            }
+        // ── LOCAL / FILE:// BYPASS ──────────────────────────────────────────
+        // When opened as a local file or dev environment without a running API,
+        // skip the network request and go straight to celebration.
+        if (!apiBaseUrl && isLocal) {
+            if (loadingOverlay) loadingOverlay.style.display = 'flex';
+            setTimeout(() => {
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+                currentStep++;
+                updateUI();
+                startConfetti();
+                playSuccessSound();
+            }, 800);
+            return;
         }
+        // ───────────────────────────────────────────────────────────────────
 
-        const endpointUrl = `${apiBaseUrl.replace(/\/+$/, '')}/api/leads/create`;
+        apiBaseUrl = window.EDUCORE_CONFIG?.apiBaseUrl || '';
+        const endpointUrl = apiBaseUrl ? `${apiBaseUrl.replace(/\/+$/, '')}/api/leads/create` : '/api/leads/create';
 
         if (loadingOverlay) loadingOverlay.style.display = 'flex';
 
@@ -317,7 +366,11 @@ document.addEventListener('DOMContentLoaded', () => {
             phoneVal = code + phoneVal;
         }
 
+        const form_elapsed_ms = Date.now() - formStartTime;
+
         const payload = {
+            website_url: rawData.website_url || '',
+            form_elapsed_ms: form_elapsed_ms,
             full_name: rawData.fullName || '',
             phone: phoneVal,
             email: rawData.email || '',
@@ -333,18 +386,34 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // 3. Send Request
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         try {
             const response = await fetch(endpointUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: controller.signal
             });
 
-            const result = await response.json().catch(() => ({}));
+            let result;
+            let parseFailed = false;
+            try {
+                const text = await response.text();
+                result = JSON.parse(text);
+                if (typeof result !== 'object' || result === null) {
+                    throw new Error('Parsed JSON is not an object');
+                }
+            } catch (e) {
+                console.error('JSON Parse Error or invalid response:', e);
+                result = {};
+                parseFailed = true;
+            }
 
-            if (response.ok && result.success !== false) {
+            if (response.ok && result.success === true && !parseFailed) {
                 setTimeout(() => {
                     if (loadingOverlay) loadingOverlay.style.display = 'none';
                     currentStep++;
@@ -355,23 +424,74 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 if (loadingOverlay) loadingOverlay.style.display = 'none';
                 
-                if (response.status === 409 || result.code === "DUPLICATE_PHONE") {
+                if (response.status === 409 && result.code === "DUPLICATE_WITHIN_30_DAYS") {
+                    const thankyouPage = document.getElementById('thankyouPage');
+                    if (thankyouPage) {
+                        thankyouPage.innerHTML = `
+                            <div class="w-24 h-24 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-yellow-100">
+                                <span class="material-icons text-5xl">warning</span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-zinc-900 mb-4 font-arabic">تم إرسال طلب بهذا الرقم مسبقًا</h2>
+                            <p class="text-zinc-500 max-w-md mx-auto mb-8 font-arabic">سبق إرسال طلب تسجيل باستخدام هذا الرقم خلال آخر 30 يومًا، لذلك لم يتم إنشاء طلب جديد. إذا رغبت في تعديل معلوماتك أو واجهت مشكلة في طلبك السابق، يمكنك التواصل معنا مباشرة عبر واتساب.</p>
+                            <a href="https://wa.me/962782610108?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%D8%8C%20%D8%B3%D8%A8%D9%82%20%D8%A3%D9%86%20%D8%A3%D8%B1%D8%B3%D9%84%D8%AA%20%D8%B7%D9%84%D8%A8%20%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%AE%D9%84%D8%A7%D9%84%20%D8%A2%D8%AE%D8%B1%2030%20%D9%8A%D9%88%D9%85%D9%8B%D8%A7%D8%8C%20%D9%88%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%AA%D8%B9%D8%AF%D9%8A%D9%84%20%D9%85%D8%B9%D9%84%D9%88%D9%85%D8%A7%D8%AA%D9%8A%20%D8%A3%D9%88%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B7%D9%84%D8%A8%D9%8A%20%D8%A7%D9%84%D8%B3%D8%A7%D8%A8%D9%82." target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-green-500/30 transition-all font-arabic inline-flex items-center gap-2">
+                                <span>تعديل المعلومات عبر واتساب</span>
+                                <span class="material-icons text-sm">chat</span>
+                            </a>
+                        `;
+                    }
+                    currentStep++;
+                    updateUI();
+                    // Explicitly NOT calling unlockSubmit() or confetti here to freeze state
+                } else if (response.status === 409 || result.code === "DUPLICATE_PHONE") {
                     alert(t.duplicatePhone);
+                    unlockSubmit();
                 } else if (response.status === 429) {
                     alert(t.tooManyRequests);
-                } else if (response.status === 400) {
+                    unlockSubmit();
+                } else if (response.status === 400 || response.status === 413) {
                     alert(t.invalidData);
+                    unlockSubmit();
                 } else if (response.status === 403) {
                     alert(t.forbidden);
+                    unlockSubmit();
+                } else if (response.status === 500) {
+                    console.error('Server Error (500):', result);
+                    showErrorPage();
+                    unlockSubmit();
                 } else {
-                    alert(t.generalError);
+                    console.error('Unexpected Response:', response.status, result);
+                    showErrorPage();
+                    unlockSubmit();
                 }
             }
         } catch (error) {
             console.error('Submission Error:', error);
             if (loadingOverlay) loadingOverlay.style.display = 'none';
-            alert(t.networkError);
+            // On local: network errors mean no API running → show celebration anyway
+            if (isLocal && error.name !== 'AbortError') {
+                currentStep++;
+                updateUI();
+                startConfetti();
+                playSuccessSound();
+            } else {
+                showErrorPage();
+            }
+            unlockSubmit();
+        } finally {
+            clearTimeout(timeoutId);
         }
+    }
+
+    function showErrorPage() {
+        stepContents.forEach(step => {
+            step.classList.add('hidden');
+            step.classList.remove('active');
+        });
+        const errorPage = document.getElementById('errorPage');
+        if (errorPage) {
+            errorPage.classList.remove('hidden');
+        }
+        if (navButtons) navButtons.style.display = 'none';
     }
 
     // Initialize
@@ -381,40 +501,164 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // --- Utils ---
+
+/* ========================================
+   CELEBRATION: Confetti + Burst + Sound
+   ======================================== */
+
 function startConfetti() {
     const container = document.getElementById('confettiContainer');
     if (!container) return;
-    const colors = ['#E11D48', '#0782c7', '#f3a609', '#10B981'];
+    container.innerHTML = ''; // clear previous
 
-    for (let i = 0; i < 150; i++) {
-        const div = document.createElement('div');
-        div.classList.add('confetti');
-        div.style.left = Math.random() * 100 + '%';
-        div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        div.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        div.style.animationDelay = (Math.random() * 2) + 's';
-        container.appendChild(div);
+    const colors = ['#E11D48', '#BE123C', '#0782c7', '#f3a609', '#10B981', '#8B5CF6', '#F59E0B', '#EC4899'];
+    const shapes = ['square', 'circle', 'ribbon'];
+    const count = 200;
+
+    // Inject keyframes once
+    if (!document.getElementById('confetti-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-keyframes';
+        style.textContent = `
+            @keyframes confettiFall {
+                0%   { transform: translateY(-20px) rotate(0deg) scaleX(1); opacity: 1; }
+                80%  { opacity: 1; }
+                100% { transform: translateY(110vh) rotate(720deg) scaleX(var(--skew)); opacity: 0; }
+            }
+            @keyframes burstOut {
+                0%   { transform: translate(0,0) scale(1); opacity: 1; }
+                100% { transform: translate(var(--bx), var(--by)) scale(0); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     }
+
+    // Rain confetti from top
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 10 + 7;
+        const skew = Math.random() > 0.5 ? 0.4 : 1;
+
+        el.style.cssText = `
+            position: absolute;
+            top: -20px;
+            left: ${Math.random() * 100}%;
+            width: ${shape === 'ribbon' ? size * 0.4 : size}px;
+            height: ${shape === 'ribbon' ? size * 2.5 : size}px;
+            background: ${color};
+            border-radius: ${shape === 'circle' ? '50%' : shape === 'ribbon' ? '2px' : '2px'};
+            --skew: ${skew};
+            animation: confettiFall ${Math.random() * 2.5 + 2}s ${Math.random() * 2.5}s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+            z-index: 9999;
+            pointer-events: none;
+        `;
+        container.appendChild(el);
+    }
+
+    // Central burst particles
+    const burstOriginX = window.innerWidth / 2;
+    const burstOriginY = window.innerHeight / 2;
+
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement('div');
+        const angle = (i / 60) * Math.PI * 2;
+        const dist = Math.random() * 250 + 80;
+        const bx = Math.cos(angle) * dist;
+        const by = Math.sin(angle) * dist;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 12 + 6;
+        const dur = Math.random() * 0.6 + 0.6;
+
+        el.style.cssText = `
+            position: fixed;
+            left: ${burstOriginX}px;
+            top: ${burstOriginY}px;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            border-radius: 50%;
+            --bx: ${bx}px;
+            --by: ${by}px;
+            animation: burstOut ${dur}s ease-out forwards;
+            z-index: 9999;
+            pointer-events: none;
+        `;
+        container.appendChild(el);
+    }
+
+    // Auto-clean after 6 seconds
+    setTimeout(() => { container.innerHTML = ''; }, 6000);
 }
 
 function playSuccessSound() {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
-    const notes = [523.25, 659.25, 783.99, 1046.50];
-    notes.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        const startTime = ctx.currentTime + (i * 0.1);
-        const duration = 1.5;
-        gain.gain.setValueAtTime(0, startTime);
-        gain.gain.linearRampToValueAtTime(0.05, startTime + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(startTime);
-        osc.stop(startTime + duration);
-    });
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+
+        // Motivating fanfare: ascending chord melody
+        // C5 -> E5 -> G5 -> C6 with a harmonic chord at the end
+        const melody = [
+            { freq: 523.25, start: 0.00, dur: 0.18 },   // C5
+            { freq: 659.25, start: 0.12, dur: 0.18 },   // E5
+            { freq: 783.99, start: 0.24, dur: 0.18 },   // G5
+            { freq: 1046.50, start: 0.36, dur: 0.40 },  // C6 (hold)
+        ];
+
+        // Final triumphant chord (C major)
+        const chord = [
+            { freq: 523.25, start: 0.50 },
+            { freq: 659.25, start: 0.50 },
+            { freq: 783.99, start: 0.50 },
+            { freq: 1046.50, start: 0.50 },
+        ];
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+        masterGain.connect(ctx.destination);
+
+        function playNote(freq, startOffset, duration) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+
+            const t = ctx.currentTime + startOffset;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(1, t + 0.04);
+            gain.gain.setValueAtTime(1, t + duration - 0.05);
+            gain.gain.linearRampToValueAtTime(0, t + duration);
+
+            osc.connect(gain);
+            gain.connect(masterGain);
+            osc.start(t);
+            osc.stop(t + duration + 0.05);
+        }
+
+        // Play melody
+        melody.forEach(n => playNote(n.freq, n.start, n.dur));
+
+        // Play final chord (brighter tone)
+        chord.forEach(n => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = n.freq;
+
+            const t = ctx.currentTime + n.start;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.9, t + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+
+            osc.connect(gain);
+            gain.connect(masterGain);
+            osc.start(t);
+            osc.stop(t + 1.3);
+        });
+
+    } catch (e) {
+        // Silence if audio not supported
+    }
 }
