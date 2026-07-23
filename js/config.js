@@ -1,3 +1,3 @@
 window.EDUCORE_CONFIG = {
-    apiBaseUrl: 'https://educore-5o4ms0cca-faraj-tr1.vercel.app'
+    apiBaseUrl: 'https://educore-faraj-tr1.vercel.app'
 };
